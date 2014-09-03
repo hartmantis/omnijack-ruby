@@ -1,6 +1,7 @@
 # Chef::Package::Metadata
 
-TODO: Write a gem description
+A gem to reproduce `install.sh`'s Chef package metadata service behavior within
+Ruby.
 
 ## Installation
 
