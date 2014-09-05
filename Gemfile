@@ -2,5 +2,5 @@
 
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in chef-package-metadata.gemspec
+# Specify your gem's dependencies in omnijack.gemspec
 gemspec

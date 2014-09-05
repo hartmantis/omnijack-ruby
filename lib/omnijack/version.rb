@@ -16,13 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class Chef
-  class Package
-    # Version string for Chef::Package::Metadata
-    #
-    # @author Jonathan Hartman <j@p4nt5.com>
-    class Metadata
-      VERSION = '0.0.1'
-    end
-  end
+# Version string for Chef::Package::Metadata
+#
+# @author Jonathan Hartman <j@p4nt5.com>
+class Omnijack
+  VERSION = '0.0.1'
 end

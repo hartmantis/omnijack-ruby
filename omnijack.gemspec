@@ -2,16 +2,16 @@
 
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'chef/package/metadata/version'
+require 'omnijack'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'chef-package-metadata'
-  spec.version       = Chef::Package::Metadata::VERSION
+  spec.name          = 'omnijack'
+  spec.version       = Omnijack::VERSION
   spec.authors       = ['Jonathan Hartman']
   spec.email         = %w(j@p4nt5.com)
-  spec.summary       = 'Get Chef package metadata in Ruby'
-  spec.description   = 'Get Chef package metadata in Ruby'
-  spec.homepage      = 'https://rubygems.org/gems/chef-package-metadata'
+  spec.summary       = "A Ruby interface to Chef's Omnitruck API"
+  spec.description   = "A Ruby interface to Chef's Omnitruck API"
+  spec.homepage      = 'https://rubygems.org/gems/omnijack'
   spec.license       = 'Apache v2.0'
 
   spec.files         = `git ls-files -z`.split("\x0")

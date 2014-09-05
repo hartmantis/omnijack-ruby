@@ -16,15 +16,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'chef/package/metadata/version'
-
-class Chef
-  class Package
-    # A Ruby class for retrieving Chef package metadata
-    #
-    # @author Jonathan Hartman <j@p4nt5.com>
-    class Metadata
-      # Your code goes here...
-    end
-  end
-end
+require_relative 'omnijack/version'
