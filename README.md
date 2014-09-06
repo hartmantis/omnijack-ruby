@@ -7,7 +7,6 @@ Omnijack
 [![Coverage Status](http://img.shields.io/coveralls/RoboticCheese/omnijack-ruby.svg)][coveralls]
 [![Dependency Status](http://img.shields.io/gemnasium/RoboticCheese/omnijack.svg)][gemnasium]
 
-
 [fury]: http://badge.fury.io/rb/omnijack
 [travis]: http://travis-ci.org/RoboticCheese/omnijack-ruby
 [codeclimate]: https://codeclimate.com/github/RoboticCheese/omnijack-ruby
@@ -17,7 +16,7 @@ Omnijack
 A Ruby client interface to Chef's
 [Omnitruck](https://github.com/opscode/opscode-omnitruck) API.
 
-A pallete jack to get the boxes out of the Omnitruck.
+A pallet jack to get the boxes out of the Omnitruck.
 
 Installation
 ------------
@@ -39,7 +38,39 @@ Or install it yourself as:
 Usage
 -----
 
-TODO: Write usage instructions here
+TODO: Example usage scenarios that this project should support:
+
+```ruby
+metadata = Omnijack::Chef.new
+```
+
+```ruby
+metadata = Omnijack::AngryChef.new
+```
+
+```ruby
+metadata = Omnijack::Server.new
+```
+
+```ruby
+metadata = Omnijack::ChefDk.new
+```
+
+```ruby
+metadata = Omnijack::Container.new
+```
+
+```ruby
+metadata = Omnijack.new(project = :container)
+```
+
+```ruby
+metadata = Omnijack.new.container
+puts metadata.url
+puts metadata.md5
+puts metadata.sha256
+puts metadata.yolo
+```
 
 Contributing
 ------------

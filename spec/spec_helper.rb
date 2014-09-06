@@ -15,10 +15,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# Version string for Chef::Package::Metadata
 #
-# @author Jonathan Hartman <j@p4nt5.com>
-class Omnijack
-  VERSION = '0.0.1'
+
+require 'rspec'
+require 'simplecov'
+require 'simplecov-console'
+require 'coveralls'
+
+RSpec.configure do |c|
+  c.color = true
 end
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  Coveralls::SimpleCov::Formatter,
+  SimpleCov::Formatter::HTMLFormatter,
+  SimpleCov::Formatter::Console
+]
+SimpleCov.minimum_coverage 90
+SimpleCov.start
