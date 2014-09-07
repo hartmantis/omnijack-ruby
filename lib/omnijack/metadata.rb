@@ -17,6 +17,7 @@
 # limitations under the License.
 
 require 'open-uri'
+require_relative 'metadata/chef_dk'
 
 class Omnijack
   # A class for representing an Omnitruck metadata object

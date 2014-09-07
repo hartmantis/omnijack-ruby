@@ -38,6 +38,29 @@ Or install it yourself as:
 Usage
 -----
 
+Getting Chef-DK package metadata from the official Chef API:
+
+```ruby
+metadata = Omnijack::Metadata::ChefDk.new
+
+puts metadata.url
+puts metadata.filename
+puts metadata.md5
+puts metadata.sha256
+puts metadata.yolo
+puts metadata[:url]
+puts metadata[:filename]
+puts metadata[:md5]
+puts metadata[:sha256]
+puts metadata[:yolo]
+```
+
+Getting Chef-DK package metadata from an unofficial Omnitruck API:
+
+```ruby
+metadata = Omnijack::Metadata::ChefDk.new('http://yoursite.example.com/chef')
+```
+
 TODO: Example usage scenarios that this project should support:
 
 ```ruby
