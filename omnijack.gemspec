@@ -19,6 +19,17 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(/^(test|spec|features)\//)
   spec.require_paths = %w(lib)
 
+  spec.required_ruby_version = '>= 1.9.3'
+
+  spec.add_dependency 'ohai', '~> 7.0'
+
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'cane'
+  spec.add_development_dependency 'countloc'
+  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'simplecov-console'
+  spec.add_development_dependency 'coveralls'
 end
