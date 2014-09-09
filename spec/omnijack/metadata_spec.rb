@@ -21,8 +21,8 @@ require_relative '../../lib/omnijack/metadata'
 
 describe Omnijack::Metadata do
   let(:attributes) { [:url, :md5, :sha256, :yolo, :filename] }
-  let(:api_url) { 'http://example.com' }
-  let(:obj) { described_class.new(api_url) }
+  let(:base_url) { 'http://example.com' }
+  let(:obj) { described_class.new(base_url) }
 
   describe '#attributes' do
     it 'returns all the recognized metadata attributes' do
@@ -31,9 +31,30 @@ describe Omnijack::Metadata do
   end
 
   describe '#initialize' do
-    it 'sets the API URL instance variable' do
-      [obj.api_url, obj.instance_variable_get(:@api_url)].each do |i|
-        expect(i).to eq(URI.parse(api_url))
+    context 'no additional args' do
+      it 'sets the API URL instance variable' do
+        [obj.api_url, obj.instance_variable_get(:@api_url)].each do |i|
+          expect(i).to eq(URI.parse("#{base_url}?"))
+        end
+      end
+    end
+
+    context 'all the possible additional args' do
+      let(:obj) do
+        described_class.new(base_url,
+                            v: '1.2',
+                            prerelease: true,
+                            nightlies: true,
+                            p: 'mac_os_x',
+                            pv: '10.9',
+                            m: 'x86_64')
+      end
+
+      it 'formats the API URL properly' do
+        expected = URI.parse("#{base_url}?v=1.2&prerelease=true&" \
+                             'nightlies=true&p=mac_os_x&pv=10.9&m=x86_64')
+        expect(obj.api_url).to eq(expected)
+        expect(obj.instance_variable_get(:@api_url)).to eq(expected)
       end
     end
   end
@@ -98,14 +119,14 @@ describe Omnijack::Metadata do
                                         __FILE__)).read
     JSON.parse(json, symbolize_names: true).each do |data|
       context "#{data[:platform]} Chef-DK" do
-        let(:api_url) do
-          'https://www.getchef.com/chef/metadata-chefdk?' \
-            "v=#{data[:version]}&" \
-            "prerelease=#{data[:prerelease]}&" \
-            "nightlies=#{data[:nightlies]}&" \
-            "p=#{data[:platform][:name]}&" \
-            "pv=#{data[:platform][:version]}&" \
-            'm=x86_64'
+        let(:obj) do
+          described_class.new('https://www.getchef.com/chef/metadata-chefdk',
+                              v: data[:version],
+                              prerelease: data[:prerelease],
+                              nightlies: data[:nightlies],
+                              p: data[:platform][:name],
+                              pv: data[:platform][:version],
+                              m: 'x86_64')
         end
         it 'returns the expected data' do
           if !data[:expected]
