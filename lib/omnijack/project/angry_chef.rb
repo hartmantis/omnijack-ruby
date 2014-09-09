@@ -25,7 +25,7 @@ class Omnijack
     # @author Jonathan Hartman <j@p4nt5.com>
     class AngryChef < Project
       def initialize(**args)
-        super('angrychef', **args)
+        super('angrychef', args)
       end
 
       #
