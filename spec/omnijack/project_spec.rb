@@ -89,8 +89,7 @@ describe Omnijack::Project do
     context 'a valid argument provided' do
       let(:obj) do
         o = super()
-        o.base_url('http://example.com')
-        o
+        o.base_url('http://example.com') && o
       end
 
       it 'uses the provided arg' do
@@ -103,8 +102,7 @@ describe Omnijack::Project do
     context 'an invalid argument provided' do
       let(:obj) do
         o = super()
-        o.base_url(:hello)
-        o
+        o.base_url(:hello) && o
       end
 
       it 'raises an exception' do
@@ -123,8 +121,7 @@ describe Omnijack::Project do
     context 'a valid argument provided' do
       let(:obj) do
         o = super()
-        o.project('chefsalad')
-        o
+        o.project('chefsalad') && o
       end
 
       it 'uses the provided arg' do
@@ -136,8 +133,7 @@ describe Omnijack::Project do
     context 'an invalid argument provided' do
       let(:obj) do
         o = super()
-        o.project(true)
-        o
+        o.project(true) && o
       end
 
       it 'raises an exception' do
@@ -158,8 +154,7 @@ describe Omnijack::Project do
     context 'a valid argument provided' do
       let(:obj) do
         o = super()
-        o.version('1.2.3')
-        o
+        o.version('1.2.3') && o
       end
 
       it 'uses the provided arg' do
@@ -171,8 +166,7 @@ describe Omnijack::Project do
     context 'an invalid argument provided' do
       let(:obj) do
         o = super()
-        o.version(false)
-        o
+        o.version(false) && o
       end
 
       it 'raises an exception' do
@@ -193,8 +187,7 @@ describe Omnijack::Project do
     context 'a valid argument provided' do
       let(:obj) do
         o = super()
-        o.prerelease(true)
-        o
+        o.prerelease(true) && o
       end
 
       it 'uses the provided arg' do
@@ -206,8 +199,7 @@ describe Omnijack::Project do
     context 'an invalid argument provided' do
       let(:obj) do
         o = super()
-        o.prerelease('wigglebot')
-        o
+        o.prerelease('wigglebot') && o
       end
 
       it 'raises an exception' do
@@ -228,8 +220,7 @@ describe Omnijack::Project do
     context 'a valid argument provided' do
       let(:obj) do
         o = super()
-        o.nightlies(true)
-        o
+        o.nightlies(true) && o
       end
 
       it 'uses the provided arg' do
@@ -241,8 +232,7 @@ describe Omnijack::Project do
     context 'an invalid argument provided' do
       let(:obj) do
         o = super()
-        o.nightlies('hello')
-        o
+        o.nightlies('hello') && o
       end
 
       it 'raises an exception' do
@@ -269,8 +259,7 @@ describe Omnijack::Project do
     context 'a valid argument provided' do
       let(:obj) do
         o = super()
-        o.platform('ms_bob')
-        o
+        o.platform('ms_bob') && o
       end
 
       it 'uses the provided arg' do
@@ -282,8 +271,7 @@ describe Omnijack::Project do
     context 'an invalid argument provided' do
       let(:obj) do
         o = super()
-        o.platform(%w(windows linux))
-        o
+        o.platform(%w(windows linux)) && o
       end
 
       it 'raises an exception' do
@@ -309,8 +297,7 @@ describe Omnijack::Project do
     context 'a valid argument provided' do
       let(:obj) do
         o = super()
-        o.platform_version('6.6.6')
-        o
+        o.platform_version('6.6.6') && o
       end
 
       it 'uses the provided arg' do
@@ -322,8 +309,7 @@ describe Omnijack::Project do
     context 'an invalid argument provided' do
       let(:obj) do
         o = super()
-        o.platform_version(%w(1 2 3))
-        o
+        o.platform_version(%w(1 2 3)) && o
       end
 
       it 'raises an exception' do
@@ -350,8 +336,7 @@ describe Omnijack::Project do
     context 'a valid argument provided' do
       let(:obj) do
         o = super()
-        o.machine_arch('arm')
-        o
+        o.machine_arch('arm') && o
       end
 
       it 'uses the provided arg' do
@@ -363,8 +348,7 @@ describe Omnijack::Project do
     context 'an invalid argument provided' do
       let(:obj) do
         o = super()
-        o.machine_arch(%w(some things))
-        o
+        o.machine_arch(%w(some things)) && o
       end
 
       it 'raises an exception' do
