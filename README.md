@@ -41,58 +41,74 @@ Usage
 Getting Chef-DK package metadata from the official Chef API:
 
 ```ruby
-metadata = Omnijack::Metadata::ChefDk.new
+require 'omnijack'
+
+chef_dk = Omnijack::Project::ChefDk.new
+metadata = chef_dk.metadata
+
+puts metadata
 
 puts metadata.url
 puts metadata.filename
 puts metadata.md5
 puts metadata.sha256
 puts metadata.yolo
+
 puts metadata[:url]
 puts metadata[:filename]
 puts metadata[:md5]
 puts metadata[:sha256]
 puts metadata[:yolo]
 ```
-
-Getting Chef-DK package metadata from an unofficial Omnitruck API:
+Getting Chef-DK project data from an unofficial Omnitruck API:
 
 ```ruby
-metadata = Omnijack::Metadata::ChefDk.new('http://yoursite.example.com/chef')
+Omnijack::Project::ChefDk.new(
+  base_url: 'https://some.custom.chef.api/endpoint'
+)
 ```
 
-TODO: Example usage scenarios that this project should support:
+Getting Chef-DK project data for a version other than the latest release:
 
 ```ruby
-metadata = Omnijack::Chef.new
+Omnijack::Project::ChefDk.new(
+  version: '1.2.3',
+  prerelease: true,
+  nightlies: true
+)
 ```
 
-```ruby
-metadata = Omnijack::AngryChef.new
-```
+Getting Chef-DK project data for a platform other than the one running:
 
 ```ruby
-metadata = Omnijack::Server.new
+Omnijack::Project::ChefDk.new(
+  platform: 'ubuntu',
+  platform_version: '14.04',
+  machine_arch: 'x86_64'
+)
 ```
 
-```ruby
-metadata = Omnijack::ChefDk.new
-```
+Getting AngryChef project data:
 
 ```ruby
-metadata = Omnijack::Container.new
+Omnijack::Project::AngryChef.new
 ```
+Getting Chef project data:
 
 ```ruby
-metadata = Omnijack.new(project = :container)
+Omnijack::Project::Chef.new
 ```
 
+Getting Chef-Container project data:
+
 ```ruby
-metadata = Omnijack.new.container
-puts metadata.url
-puts metadata.md5
-puts metadata.sha256
-puts metadata.yolo
+Omnijack::Project::Container.new
+```
+
+Getting Chef Server project data:
+
+```ruby
+Omnijack::Project::Server.new
 ```
 
 Contributing
