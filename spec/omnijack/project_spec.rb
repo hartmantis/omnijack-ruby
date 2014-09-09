@@ -50,7 +50,12 @@ describe Omnijack::Project do
   end
 
   describe '#metadata' do
-    let(:obj) { described_class.new(project: 'chefdk') }
+    let(:obj) do
+      described_class.new(project: 'chefdk',
+                          platform: 'ubuntu',
+                          platform_version: '14.04',
+                          machine_arch: 'x86_64')
+    end
 
     it 'returns a Metadata object' do
       res = obj
@@ -61,7 +66,14 @@ describe Omnijack::Project do
 
     it 'uses the right API endpoint' do
       expected = 'https://www.getchef.com/chef/metadata-chefdk'
-      expect(Omnijack::Metadata).to receive(:new).with(expected)
+      expect(Omnijack::Metadata).to receive(:new).with(expected,
+                                                       v: 'latest',
+                                                       prerelease: false,
+                                                       nightlies: false,
+                                                       p: 'ubuntu',
+                                                       pv: '14.04',
+                                                       m: 'x86_64')
+      obj.metadata
     end
   end
 

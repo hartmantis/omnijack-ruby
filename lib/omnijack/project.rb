@@ -31,6 +31,7 @@ class Omnijack
     include Chef::Mixin::ParamsValidate
     include Helpers
 
+    # TODO: Make project the static first arg since it's required
     def initialize(**args)
       [
         :base_url, :project, :version, :prerelease, :nightlies,
@@ -38,6 +39,7 @@ class Omnijack
       ].each do |i|
         send(i, args[i]) unless args[i].nil?
       end
+      self
     end
 
     #
@@ -46,7 +48,14 @@ class Omnijack
     # @return [Omnijack::Metadata]
     #
     def metadata
-      @metadata ||= Metadata.new(URI("#{base_url}/metadata-#{project}?").to_s)
+      # TODO: This requires too much knowledge of the Metadata class
+      @metadata ||= Metadata.new(URI("#{base_url}/metadata-#{project}").to_s,
+                                 v: version,
+                                 prerelease: prerelease,
+                                 nightlies: nightlies,
+                                 p: platform,
+                                 pv: platform_version,
+                                 m: machine_arch)
     end
 
     #
@@ -138,6 +147,8 @@ class Omnijack
     # @return [String]
     #
     def platform_version(arg = nil)
+      # TODO: The platform version parser living in `node` means passing e.g.
+      # '10.9.2' here won't result in it being shortened to '10.9'
       set_or_return(:platform_version,
                     arg,
                     kind_of: String,
