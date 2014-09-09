@@ -17,6 +17,9 @@
 # limitations under the License.
 
 require 'ohai'
+require 'open-uri'
+require_relative 'helpers'
+require_relative 'metadata'
 require_relative '../../vendor/chef/lib/chef/exceptions'
 require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
 
@@ -26,6 +29,7 @@ class Omnijack
   # @author Jonathan Hartman <j@p4nt5.com>
   class Project
     include Chef::Mixin::ParamsValidate
+    include Helpers
 
     def initialize(**args)
       [
@@ -34,6 +38,15 @@ class Omnijack
       ].each do |i|
         send(i, args[i]) unless args[i].nil?
       end
+    end
+
+    #
+    # The Metadata instance for the project
+    #
+    # @return [Omnijack::Metadata]
+    #
+    def metadata
+      @metadata ||= Metadata.new(URI("#{base_url}/metadata-#{project}?").to_s)
     end
 
     #
@@ -47,7 +60,7 @@ class Omnijack
       set_or_return(:base_url,
                     arg,
                     kind_of: String,
-                    default: 'https://www.getchef.com/chef')
+                    default: DEFAULT_BASE_URL)
     end
 
     #

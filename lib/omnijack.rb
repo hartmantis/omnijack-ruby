@@ -16,5 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require_relative 'omnijack/metadata'
 require_relative 'omnijack/project'
 require_relative 'omnijack/version'

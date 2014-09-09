@@ -49,6 +49,22 @@ describe Omnijack::Project do
     end
   end
 
+  describe '#metadata' do
+    let(:obj) { described_class.new(project: 'chefdk') }
+
+    it 'returns a Metadata object' do
+      res = obj
+      expect(res.metadata).to be_an_instance_of(Omnijack::Metadata)
+      expect(res.instance_variable_get(:@metadata))
+        .to be_an_instance_of(Omnijack::Metadata)
+    end
+
+    it 'uses the right API endpoint' do
+      expected = 'https://www.getchef.com/chef/metadata-chefdk'
+      expect(Omnijack::Metadata).to receive(:new).with(expected)
+    end
+  end
+
   describe '#base_url' do
     context 'no argument provided' do
       it 'uses the default' do
