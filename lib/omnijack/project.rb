@@ -32,10 +32,11 @@ class Omnijack
     include Helpers
 
     # TODO: Make project the static first arg since it's required
-    def initialize(**args)
+    def initialize(project_arg, **args)
+      project(project_arg)
       [
-        :base_url, :project, :version, :prerelease, :nightlies,
-        :platform, :platform_version, :machine_arch
+        :base_url, :version, :prerelease, :nightlies, :platform,
+        :platform_version, :machine_arch
       ].each do |i|
         send(i, args[i]) unless args[i].nil?
       end

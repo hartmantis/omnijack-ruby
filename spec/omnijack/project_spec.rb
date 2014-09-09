@@ -20,7 +20,7 @@ require_relative '../spec_helper'
 require_relative '../../lib/omnijack/project'
 
 describe Omnijack::Project do
-  let(:obj) { described_class.new }
+  let(:obj) { described_class.new('chefdk') }
 
   describe '#initialize' do
     context 'no args provided' do
@@ -31,7 +31,6 @@ describe Omnijack::Project do
 
     {
       base_url: 'https://example.com',
-      project: 'cocinero',
       version: '1.2.3-1',
       prerelease: true,
       nightlies: true,
@@ -39,7 +38,7 @@ describe Omnijack::Project do
       platform_version: '21'
     }.each do |k, v|
       context "a #{k} arg provided" do
-        let(:obj) { described_class.new(k => v) }
+        let(:obj) { described_class.new('cocinero', k => v) }
 
         it 'sets the given arg' do
           expect(obj.send(k)).to eq(v)
@@ -51,7 +50,7 @@ describe Omnijack::Project do
 
   describe '#metadata' do
     let(:obj) do
-      described_class.new(project: 'chefdk',
+      described_class.new('chefdk',
                           platform: 'ubuntu',
                           platform_version: '14.04',
                           machine_arch: 'x86_64')
@@ -116,8 +115,8 @@ describe Omnijack::Project do
 
   describe '#project' do
     context 'no argument provided' do
-      it 'raises an exception' do
-        expect { obj.project }.to raise_error(Chef::Exceptions::ValidationFailed)
+      it 'returns the project' do
+        expect(obj.project).to eq('chefdk')
       end
     end
 
@@ -134,10 +133,10 @@ describe Omnijack::Project do
       end
     end
 
-    context 'no argument provided' do
+    context 'an invalid argument provided' do
       let(:obj) do
         o = super()
-        o.project
+        o.project(true)
         o
       end
 
