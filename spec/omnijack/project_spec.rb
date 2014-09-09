@@ -20,43 +20,30 @@ require_relative '../spec_helper'
 require_relative '../../lib/omnijack/project'
 
 describe Omnijack::Project do
-  let(:attributes) do
-    [:base_url, :project, :version, :prerelease, :nightlies, :platform_version,
-     :platform, :machine_arch]
-  end
-  [
-    :base_url, :project, :version, :prerelease, :nightlies, :platform_version,
-    :platform, :machine_arch
-  ].each { |a| let(a) { nil } }
-  let(:obj) do
-    args = attributes.each_with_object({}) do |a, hsh|
-      hsh[a] = send(a)
-      hsh
-    end
-    described_class.new(args.empty? ? nil : args)
-  end
+  let(:obj) { described_class.new }
 
   describe '#initialize' do
-    context 'no arguments provided' do
-      [
-        :base_url, :project, :version, :prerelease, :nightlies,
-        :platform_version, :platform, :machine_arch
-      ].each do |a|
-        it "sets #{a} to nil" do
-          expect(obj.instance_variable_get(:"@#{a}")).to eq(nil)
-        end
+    context 'no args provided' do
+      it 'is called successfully' do
+        expect(obj).to be_an_instance_of(described_class)
       end
     end
 
-    [
-      :base_url, :project, :version, :prerelease, :nightlies,
-      :platform_version, :platform, :machine_arch
-    ].each do |a|
-      context "a #{a} argument provided" do
-        let(a) { 'something' }
+    {
+      base_url: 'https://example.com',
+      project: 'cocinero',
+      version: '1.2.3-1',
+      prerelease: true,
+      nightlies: true,
+      platform: 'gentoo',
+      platform_version: '21'
+    }.each do |k, v|
+      context "a #{k} arg provided" do
+        let(:obj) { described_class.new(k => v) }
 
-        it 'uses the provided arg' do
-          expect(obj.instance_variable_get(:"@#{a}")).to eq('something')
+        it 'sets the given arg' do
+          expect(obj.send(k)).to eq(v)
+          expect(obj.instance_variable_get(:"@#{k}")).to eq(v)
         end
       end
     end
@@ -64,14 +51,15 @@ describe Omnijack::Project do
 
   describe '#base_url' do
     context 'no argument provided' do
-      it 'returns nil' do
+      it 'uses the default' do
         res = obj
-        expect(res.base_url).to eq(nil)
-        expect(res.instance_variable_get(:@base_url)).to eq(nil)
+        expected = 'https://www.getchef.com/chef'
+        expect(res.base_url).to eq(expected)
+        expect(res.instance_variable_get(:@base_url)).to eq(expected)
       end
     end
 
-    context 'an argument provided' do
+    context 'a valid argument provided' do
       let(:obj) do
         o = super()
         o.base_url('http://example.com')
@@ -84,16 +72,28 @@ describe Omnijack::Project do
           .to eq('http://example.com')
       end
     end
+
+    context 'an invalid argument provided' do
+      let(:obj) do
+        o = super()
+        o.base_url(:hello)
+        o
+      end
+
+      it 'raises an exception' do
+        expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
+      end
+    end
   end
 
   describe '#project' do
     context 'no argument provided' do
-      it 'returns nil' do
-        expect(obj.project).to eq(nil)
+      it 'raises an exception' do
+        expect { obj.project }.to raise_error(Chef::Exceptions::ValidationFailed)
       end
     end
 
-    context 'an argument provided' do
+    context 'a valid argument provided' do
       let(:obj) do
         o = super()
         o.project('chefsalad')
@@ -105,25 +105,16 @@ describe Omnijack::Project do
         expect(obj.instance_variable_get(:@project)).to eq('chefsalad')
       end
     end
-  end
 
-  describe '#project' do
     context 'no argument provided' do
-      it 'returns nil' do
-        expect(obj.project).to eq(nil)
-      end
-    end
-
-    context 'an argument provided' do
       let(:obj) do
         o = super()
-        o.project('chefsalad')
+        o.project
         o
       end
 
-      it 'uses the provided arg' do
-        expect(obj.project).to eq('chefsalad')
-        expect(obj.instance_variable_get(:@project)).to eq('chefsalad')
+      it 'raises an exception' do
+        expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
       end
     end
   end
@@ -137,7 +128,7 @@ describe Omnijack::Project do
       end
     end
 
-    context 'an argument provided' do
+    context 'a valid argument provided' do
       let(:obj) do
         o = super()
         o.version('1.2.3')
@@ -147,6 +138,18 @@ describe Omnijack::Project do
       it 'uses the provided arg' do
         expect(obj.version).to eq('1.2.3')
         expect(obj.instance_variable_get(:@version)).to eq('1.2.3')
+      end
+    end
+
+    context 'an invalid argument provided' do
+      let(:obj) do
+        o = super()
+        o.version(false)
+        o
+      end
+
+      it 'raises an exception' do
+        expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
       end
     end
   end
@@ -160,7 +163,7 @@ describe Omnijack::Project do
       end
     end
 
-    context 'an argument provided' do
+    context 'a valid argument provided' do
       let(:obj) do
         o = super()
         o.prerelease(true)
@@ -170,6 +173,18 @@ describe Omnijack::Project do
       it 'uses the provided arg' do
         expect(obj.prerelease).to eq(true)
         expect(obj.instance_variable_get(:@prerelease)).to eq(true)
+      end
+    end
+
+    context 'an invalid argument provided' do
+      let(:obj) do
+        o = super()
+        o.prerelease('wigglebot')
+        o
+      end
+
+      it 'raises an exception' do
+        expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
       end
     end
   end
@@ -183,7 +198,7 @@ describe Omnijack::Project do
       end
     end
 
-    context 'an argument provided' do
+    context 'a valid argument provided' do
       let(:obj) do
         o = super()
         o.nightlies(true)
@@ -195,113 +210,16 @@ describe Omnijack::Project do
         expect(obj.instance_variable_get(:@nightlies)).to eq(true)
       end
     end
-  end
 
-  describe '#platform_version' do
-    before(:each) do
-      allow_any_instance_of(described_class).to receive(:platform)
-        .and_return(platform)
-      allow_any_instance_of(described_class).to receive(:node)
-        .and_return(platform_version: platform_version)
-    end
-
-    context 'no argument provided' do
-      context 'Mac OS X' do
-        let(:platform) { 'mac_os_x' }
-
-        it 'calls the specialized OS X method' do
-          pending
-          res = obj
-          expect(res).to receive(:platform_version_mac_os_x).and_return(true)
-          expect(res.platform_version).to eq(true)
-          expect(res.instance_variable_get(:@platform_version)).to eq(true)
-        end
-      end
-
-      context 'Windows' do
-        let(:platform) { 'windows' }
-
-        it 'calls the specialized Windows method' do
-          pending
-          res = obj
-          expect(res).to receive(:platform_version_windows).and_return(true)
-          expect(res.platform_version).to eq(true)
-          expect(res.instance_variable_get(:@platform_version)).to eq(true)
-        end
-      end
-
-      context 'CentOS' do
-        let(:platform) { 'centos' }
-        let(:platform_version) { '6.5' }
-
-        it 'returns the platform version from Ohai' do
-          pending
-          res = obj
-          expect(res.platform_version).to eq('6.5')
-          expect(res.instance_variable_get(:@platform_version)).to eq(true)
-        end
-      end
-
-      context 'Ubuntu' do
-        let(:platform) { 'ubuntu' }
-        let(:platform_version) { '12.04' }
-
-        it 'returns the platform version from Ohai' do
-          pending
-          res = obj
-          expect(res.platform_version).to eq('12.04')
-          expect(res.instance_variable_get(:@platform_version)).to eq(true)
-        end
-      end
-    end
-
-    context 'an argument provided' do
+    context 'an invalid argument provided' do
       let(:obj) do
         o = super()
-        o.platform_version('1.2.3')
+        o.nightlies('hello')
         o
       end
 
-      context 'Mac OS X' do
-        let(:platform) { 'mac_os_x' }
-
-        it 'calls the specialized OS X method' do
-          pending
-          expect(obj).to receive(:platform_version_mac_os_x).and_return(true)
-          expect(obj.platform_version).to eq(true)
-          expect(obj.instance_variable_get(:@platform_version)).to eq(true)
-        end
-      end
-
-      context 'Windows' do
-        let(:platform) { 'windows' }
-
-        it 'calls the specialized Windows method' do
-          pending
-          res = obj
-          expect(res).to receive(:platform_version_windows).and_return(true)
-          expect(res.platform_version).to eq(true)
-          expect(res.instance_variable_get(:@platform_version)).to eq(true)
-        end
-      end
-
-      context 'CentOS' do
-        let(:platform) { 'centos' }
-
-        it 'uses the provided arg' do
-          pending
-          expect(obj.platform_version).to eq('1.2.3')
-          expect(obj.instance_variable_get(:@platform_version)).to eq('1.2.3')
-        end
-      end
-
-      context 'Ubuntu' do
-        let(:platform) { 'ubuntu' }
-
-        it 'uses the provided arg' do
-          expect(obj.platform_version).to eq('1.2.3')
-          expect(obj.instance_variable_get(:@platform_version)).to eq('1.2.3')
-        end
+      it 'raises an exception' do
+        expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
       end
     end
   end
@@ -314,14 +232,14 @@ describe Omnijack::Project do
     end
 
     context 'no argument provided' do
-      it 'uses the platform from Ohai' do
+      it 'uses the node Ohai data' do
         res = obj
         expect(res.platform).to eq('ms_dos')
         expect(res.instance_variable_get(:@platform)).to eq('ms_dos')
       end
     end
 
-    context 'an argument provided' do
+    context 'a valid argument provided' do
       let(:obj) do
         o = super()
         o.platform('ms_bob')
@@ -331,6 +249,58 @@ describe Omnijack::Project do
       it 'uses the provided arg' do
         expect(obj.platform).to eq('ms_bob')
         expect(obj.instance_variable_get(:@platform)).to eq('ms_bob')
+      end
+    end
+
+    context 'an invalid argument provided' do
+      let(:obj) do
+        o = super()
+        o.platform(%w(windows linux))
+        o
+      end
+
+      it 'raises an exception' do
+        expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
+      end
+    end
+  end
+
+  describe '#platform_version' do
+    let(:node) { { platform_version: '1.2.3' } }
+
+    before(:each) do
+      allow_any_instance_of(described_class).to receive(:node).and_return(node)
+    end
+
+    context 'no argument provided' do
+      it 'uses the node Ohai data' do
+        expect(obj.platform_version).to eq('1.2.3')
+        expect(obj.instance_variable_get(:@platform_version)).to eq('1.2.3')
+      end
+    end
+
+    context 'a valid argument provided' do
+      let(:obj) do
+        o = super()
+        o.platform_version('6.6.6')
+        o
+      end
+
+      it 'uses the provided arg' do
+        expect(obj.platform_version).to eq('6.6.6')
+        expect(obj.instance_variable_get(:@platform_version)).to eq('6.6.6')
+      end
+    end
+
+    context 'an invalid argument provided' do
+      let(:obj) do
+        o = super()
+        o.platform_version(%w(1 2 3))
+        o
+      end
+
+      it 'raises an exception' do
+        expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
       end
     end
   end
@@ -343,14 +313,14 @@ describe Omnijack::Project do
     end
 
     context 'no argument provided' do
-      it 'uses the machine arch from Ohai' do
+      it 'uses the node Ohai data' do
         res = obj
         expect(res.machine_arch).to eq('x86_64')
         expect(res.instance_variable_get(:@machine_arch)).to eq('x86_64')
       end
     end
 
-    context 'an argument provided' do
+    context 'a valid argument provided' do
       let(:obj) do
         o = super()
         o.machine_arch('arm')
@@ -360,6 +330,114 @@ describe Omnijack::Project do
       it 'uses the provided arg' do
         expect(obj.machine_arch).to eq('arm')
         expect(obj.instance_variable_get(:@machine_arch)).to eq('arm')
+      end
+    end
+
+    context 'an invalid argument provided' do
+      let(:obj) do
+        o = super()
+        o.machine_arch(%w(some things))
+        o
+      end
+
+      it 'raises an exception' do
+        expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
+      end
+    end
+  end
+
+  describe '#node' do
+    let(:platform) { nil }
+    let(:platform_version) { nil }
+    let(:system) do
+      double(all_plugins: [
+        double(data: { platform: platform, platform_version: platform_version })
+      ])
+    end
+
+    before(:each) do
+      unless platform.nil? || platform_version.nil?
+        allow(Ohai::System).to receive(:new).and_return(system)
+      end
+    end
+
+    it 'loads and returns Ohai platform data' do
+      node = obj.send(:node)
+      expect(node[:platform]).to be_an_instance_of(String)
+      expect(node[:platform_version]).to be_an_instance_of(String)
+    end
+
+    context 'Mac OS X' do
+      let(:platform) { 'mac_os_x' }
+      let(:platform_version) { '10.9.2' }
+
+      it 'calls the custom Mac OS X version logic' do
+        o = obj
+        expect(o).to receive(:platform_version_mac_os_x).and_call_original
+        expect(o.send(:node)[:platform_version]).to eq('10.9')
+      end
+    end
+
+    context 'Windows' do
+      let(:platform) { 'windows' }
+      let(:platform_version) { '6.3' }
+
+      it 'calls the custom Windows version logic' do
+        o = obj
+        expect(o).to receive(:platform_version_windows).and_call_original
+        expect(o.send(:node)[:platform_version]).to eq('2012r2')
+      end
+    end
+
+    context 'CentOS' do
+      let(:platform) { 'centos' }
+      let(:platform_version) { '7.0' }
+
+      it 'does not modify the version' do
+        expect(obj.send(:node)[:platform_version]).to eq('7.0')
+      end
+    end
+
+    context 'Ubuntu' do
+      let(:platform) { 'ubuntu' }
+      let(:platform_version) { '14.04' }
+
+      it 'does not modify the version' do
+        expect(obj.send(:node)[:platform_version]).to eq('14.04')
+      end
+    end
+  end
+
+  describe '#version' do
+    context 'a "latest" version' do
+      let(:res) { obj.send(:valid_version?, 'latest') }
+
+      it 'returns true' do
+        expect(res).to eq(true)
+      end
+    end
+
+    context 'a valid major.minor.patch version' do
+      let(:res) { obj.send(:valid_version?, '12.34.56') }
+
+      it 'returns true' do
+        expect(res).to eq(true)
+      end
+    end
+
+    context 'a valid major.minor.patch-build version' do
+      let(:res) { obj.send(:valid_version?, '12.34.9-42') }
+
+      it 'returns true' do
+        expect(res).to eq(true)
+      end
+    end
+
+    context 'an invalid version' do
+      let(:res) { obj.send(:valid_version?, 'x.y.z') }
+
+      it 'returns false' do
+        expect(res).to eq(false)
       end
     end
   end
@@ -405,14 +483,6 @@ describe Omnijack::Project do
           expect(obj.send(:platform_version_windows)).to eq(expected)
         end
       end
-    end
-  end
-
-  describe '#node' do
-    it 'loads and returns Ohai platform data' do
-      node = obj.send(:node)
-      expect(node[:platform]).to be_an_instance_of(String)
-      expect(node[:platform_version]).to be_an_instance_of(String)
     end
   end
 end

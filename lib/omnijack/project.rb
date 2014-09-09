@@ -17,16 +17,20 @@
 # limitations under the License.
 
 require 'ohai'
+require_relative '../../vendor/chef/lib/chef/exceptions'
+require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
 
 class Omnijack
   # A template for all the Omnitruck projects
   #
   # @author Jonathan Hartman <j@p4nt5.com>
   class Project
+    include Chef::Mixin::ParamsValidate
+
     def initialize(**args)
       [
         :base_url, :project, :version, :prerelease, :nightlies,
-        :platform_version, :platform, :machine_arch
+        :platform, :platform_version, :machine_arch
       ].each do |i|
         send(i, args[i]) unless args[i].nil?
       end
@@ -39,7 +43,11 @@ class Omnijack
     # @return [String]
     #
     def base_url(arg = nil)
-      @base_url ||= arg
+      # TODO: Better URL validation
+      set_or_return(:base_url,
+                    arg,
+                    kind_of: String,
+                    default: 'https://www.getchef.com/chef')
     end
 
     #
@@ -49,7 +57,10 @@ class Omnijack
     # @return [String]
     #
     def project(arg = nil)
-      @project ||= arg
+      set_or_return(:project,
+                    arg,
+                    kind_of: String,
+                    required: true)
     end
 
     #
@@ -59,7 +70,13 @@ class Omnijack
     # @return [String]
     #
     def version(arg = nil)
-      @version ||= !arg.nil? ? arg : 'latest'
+      set_or_return(:version,
+                    arg,
+                    kind_of: String,
+                    default: 'latest',
+                    callbacks: {
+                      'Invalid version string' => ->(a) { valid_version?(a) }
+                    })
     end
 
     #
@@ -69,7 +86,10 @@ class Omnijack
     # @return [TrueClass, FalseClass]
     #
     def prerelease(arg = nil)
-      @prerelease ||= !arg.nil? ? arg : false
+      set_or_return(:prerelease,
+                    arg,
+                    kind_of: [TrueClass, FalseClass],
+                    default: false)
     end
 
     #
@@ -79,24 +99,10 @@ class Omnijack
     # @return [TrueClass, FalseClass]
     #
     def nightlies(arg = nil)
-      @nightlies ||= !arg.nil? ? arg : false
-    end
-
-    #
-    # The version of the desired platform
-    #
-    # @param [String, NilClass] arg
-    # @return [String]
-    #
-    def platform_version(arg = nil)
-      @platform_version ||= !arg.nil? ? arg : case platform
-                                              when 'mac_os_x'
-                                                platform_version_mac_os_x
-                                              when 'windows'
-                                                platform_version_windows
-                                              else
-                                                node['platform_version']
-                                              end
+      set_or_return(:nightlies,
+                    arg,
+                    kind_of: [TrueClass, FalseClass],
+                    default: false)
     end
 
     #
@@ -106,7 +112,23 @@ class Omnijack
     # @return [String]
     #
     def platform(arg = nil)
-      @platform ||= !arg.nil? ? arg : node[:platform]
+      set_or_return(:platform,
+                    arg,
+                    kind_of: String,
+                    default: node[:platform])
+    end
+
+    #
+    # The version of the desired platform
+    #
+    # @param [String, NilClass] arg
+    # @return [String]
+    #
+    def platform_version(arg = nil)
+      set_or_return(:platform_version,
+                    arg,
+                    kind_of: String,
+                    default: node[:platform_version])
     end
 
     #
@@ -116,10 +138,31 @@ class Omnijack
     # @return [String]
     #
     def machine_arch(arg = nil)
-      @machine_arch ||= !arg.nil? ? arg : node[:kernel][:machine]
+      set_or_return(:machine_arch,
+                    arg,
+                    kind_of: String,
+                    default: node[:kernel][:machine])
     end
 
     private
+
+    #
+    # Fetch and return node data from Ohai
+    #
+    # @return [Mash]
+    #
+    def node
+      unless @node
+        @node = Ohai::System.new.all_plugins('platform')[0].data
+        case @node[:platform]
+        when 'mac_os_x'
+          @node[:platform_version] = platform_version_mac_os_x
+        when 'windows'
+          @node[:platform_version] = platform_version_windows
+        end
+      end
+      @node
+    end
 
     #
     # Apply special logic for the version of an OS X platform
@@ -145,12 +188,14 @@ class Omnijack
     end
 
     #
-    # Fetch and return node data from Ohai
+    # Determine whether a string is a valid version string
     #
-    # @return [Mash]
+    # @param [String] arg
+    # @return [TrueClass, FalseClass]
     #
-    def node
-      @node ||= Ohai::System.new.all_plugins('platform')[0].data
+    def valid_version?(arg)
+      return true if arg == 'latest'
+      arg.match(/^[0-9]+\.[0-9]+\.[0-9]+(-[0-9]+)?$/) ? true : false
     end
   end
 end
