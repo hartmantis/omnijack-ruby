@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require 'json'
 require_relative '../spec_helper'
 require_relative '../../lib/omnijack/metadata'
 
@@ -112,6 +113,16 @@ describe Omnijack::Metadata do
         expected = { url: url, md5: md5, sha256: sha256, yolo: yolo,
                      filename: 'chefdk-0.2.1-1.el6.x86_64.rpm' }
         expect(obj.to_h).to eq(expected)
+      end
+
+      [true, false].each do |tf|
+        context "data with a #{tf} value in it" do
+          let(:yolo) { tf }
+
+          it 'converts that string into a boolean' do
+            expect(obj.to_h[:yolo]).to eq(tf)
+          end
+        end
       end
     end
 
