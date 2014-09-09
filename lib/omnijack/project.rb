@@ -22,13 +22,18 @@ require_relative 'helpers'
 require_relative 'metadata'
 require_relative '../../vendor/chef/lib/chef/exceptions'
 require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
+require_relative 'project/angry_chef'
+require_relative 'project/chef'
+require_relative 'project/chef_dk'
+require_relative 'project/container'
+require_relative 'project/server'
 
 class Omnijack
   # A template for all the Omnitruck projects
   #
   # @author Jonathan Hartman <j@p4nt5.com>
   class Project
-    include Chef::Mixin::ParamsValidate
+    include ::Chef::Mixin::ParamsValidate
     include Helpers
 
     # TODO: Make project the static first arg since it's required
