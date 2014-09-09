@@ -205,7 +205,8 @@ class Omnijack
     #
     def platform_version_windows
       # Make a best guess and assume a server OS
-      # See: http://msdn.microsoft.com/en-us/library/windows/desktop/ms724832(v=vs.85).aspx
+      # See: http://msdn.microsoft.com/en-us/library/windows/
+      #      desktop/ms724832(v=vs.85).aspx
       {
         '6.3' => '2012r2', '6.2' => '2012', '6.1' => '2008r2', '6.0' => '2008',
         '5.2' => '2003r2', '5.1' => 'xp', '5.0' => '2000'
