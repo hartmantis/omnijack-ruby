@@ -19,6 +19,7 @@
 require 'ohai'
 require 'open-uri'
 require_relative 'helpers'
+require_relative 'list'
 require_relative 'metadata'
 require_relative '../../vendor/chef/lib/chef/exceptions'
 require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
@@ -65,6 +66,15 @@ class Omnijack
     end
 
     #
+    # The full list instance for the project
+    #
+    # @return [Omnijack::List]
+    #
+    def list
+      @list ||= List.new(URI("#{base_url}/full_#{project}_list").to_s)
+    end
+
+    #
     # The base URL for the API
     #
     # @param [String, NilClass] arg
@@ -72,10 +82,7 @@ class Omnijack
     #
     def base_url(arg = nil)
       # TODO: Better URL validation
-      set_or_return(:base_url,
-                    arg,
-                    kind_of: String,
-                    default: DEFAULT_BASE_URL)
+      set_or_return(:base_url, arg, kind_of: String, default: DEFAULT_BASE_URL)
     end
 
     #
@@ -85,10 +92,7 @@ class Omnijack
     # @return [String]
     #
     def project(arg = nil)
-      set_or_return(:project,
-                    arg,
-                    kind_of: String,
-                    required: true)
+      set_or_return(:project, arg, kind_of: String, required: true)
     end
 
     #
@@ -140,10 +144,7 @@ class Omnijack
     # @return [String]
     #
     def platform(arg = nil)
-      set_or_return(:platform,
-                    arg,
-                    kind_of: String,
-                    default: node[:platform])
+      set_or_return(:platform, arg, kind_of: String, default: node[:platform])
     end
 
     #

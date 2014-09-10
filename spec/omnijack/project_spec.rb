@@ -48,6 +48,23 @@ describe Omnijack::Project do
     end
   end
 
+  describe '#list' do
+    let(:obj) { described_class.new('chefdk') }
+
+    it 'returns a List object' do
+      res = obj
+      [res.list, res.instance_variable_get(:@list)].each do |i|
+        expect(i).to be_an_instance_of(Omnijack::List)
+      end
+    end
+
+    it 'uses the right API endpoint' do
+      expected = 'https://www.getchef.com/chef/full_chefdk_list'
+      expect(Omnijack::List).to receive(:new).with(expected)
+      obj.list
+    end
+  end
+
   describe '#metadata' do
     let(:obj) do
       described_class.new('chefdk',
@@ -58,9 +75,9 @@ describe Omnijack::Project do
 
     it 'returns a Metadata object' do
       res = obj
-      expect(res.metadata).to be_an_instance_of(Omnijack::Metadata)
-      expect(res.instance_variable_get(:@metadata))
-        .to be_an_instance_of(Omnijack::Metadata)
+      [res.metadata, res.instance_variable_get(:@metadata)].each do |i|
+        expect(i).to be_an_instance_of(Omnijack::Metadata)
+      end
     end
 
     it 'uses the right API endpoint' do

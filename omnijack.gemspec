@@ -21,7 +21,8 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 1.9.3'
 
-  spec.add_dependency 'ohai', '~> 7.0'
+  spec.add_dependency 'ohai'
+  spec.add_dependency 'json'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
@@ -32,5 +33,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'simplecov-console'
   spec.add_development_dependency 'coveralls'
-  spec.add_development_dependency 'json'
 end

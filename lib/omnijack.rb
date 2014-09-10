@@ -17,6 +17,7 @@
 # limitations under the License.
 
 require_relative 'omnijack/helpers'
+require_relative 'omnijack/list'
 require_relative 'omnijack/metadata'
 require_relative 'omnijack/project'
 require_relative 'omnijack/version'
