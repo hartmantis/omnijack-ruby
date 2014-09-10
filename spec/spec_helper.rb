@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 
+require 'net/http'
 require 'rspec'
 require 'simplecov'
 require 'simplecov-console'

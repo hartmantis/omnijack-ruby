@@ -37,7 +37,6 @@ class Omnijack
     include ::Chef::Mixin::ParamsValidate
     include Helpers
 
-    # TODO: Make project the static first arg since it's required
     def initialize(project_arg, args = {})
       project(project_arg)
       [
