@@ -88,11 +88,14 @@ class Omnijack
     #
     # The name of the project
     #
-    # @param [String, NilClass] arg
-    # @return [String]
+    # @param [String, Symbol, NilClass] arg
+    # @return [Symbol]
     #
     def project(arg = nil)
-      set_or_return(:project, arg, kind_of: String, required: true)
+      set_or_return(:project,
+                    !arg.nil? ? arg.to_sym : nil,
+                    kind_of: Symbol,
+                    required: true)
     end
 
     #

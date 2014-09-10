@@ -26,8 +26,8 @@ describe Omnijack::Project::ChefServer do
     context 'no additional args' do
       it 'initializes a server project' do
         res = obj
-        expect(res.project).to eq('chef_server')
-        expect(res.instance_variable_get(:@project)).to eq('chef_server')
+        expect(res.project).to eq(:chef_server)
+        expect(res.instance_variable_get(:@project)).to eq(:chef_server)
       end
     end
 
@@ -45,8 +45,8 @@ describe Omnijack::Project::ChefServer do
   end
 
   describe '#project' do
-    it 'returns server' do
-      expect(obj.project).to eq('chef_server')
+    it 'returns chef_server' do
+      expect(obj.project).to eq(:chef_server)
     end
 
     it 'refuses attempts to override' do

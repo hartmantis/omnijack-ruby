@@ -26,8 +26,8 @@ describe Omnijack::Project::Chef do
     context 'no additional args' do
       it 'initializes a chef project' do
         res = obj
-        expect(res.project).to eq('chef')
-        expect(res.instance_variable_get(:@project)).to eq('chef')
+        expect(res.project).to eq(:chef)
+        expect(res.instance_variable_get(:@project)).to eq(:chef)
       end
     end
 
@@ -46,7 +46,7 @@ describe Omnijack::Project::Chef do
 
   describe '#project' do
     it 'returns chef' do
-      expect(obj.project).to eq('chef')
+      expect(obj.project).to eq(:chef)
     end
 
     it 'refuses attempts to override' do

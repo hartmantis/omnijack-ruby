@@ -25,18 +25,18 @@ class Omnijack
     # @author Jonathan Hartman <j@p4nt5.com>
     class ChefDk < Project
       def initialize(args = {})
-        super('chefdk', args)
+        super(:chef_dk, args)
       end
 
       #
       # Override to prevent setting different projects
       #
-      # @return [String]
+      # @return [Symbol]
       #
       def project(arg = nil)
         set_or_return(:project,
-                      arg,
-                      equal_to: 'chefdk')
+                      !arg.nil? ? arg.to_sym : nil,
+                      equal_to: :chef_dk)
       end
     end
   end

@@ -25,18 +25,18 @@ class Omnijack
     # @author Jonathan Hartman <j@p4nt5.com>
     class ChefContainer < Project
       def initialize(args = {})
-        super('chef_container', args)
+        super(:chef_container, args)
       end
 
       #
       # Override to prevent setting different projects
       #
-      # @return [String]
+      # @return [Symbol]
       #
       def project(arg = nil)
         set_or_return(:project,
-                      arg,
-                      equal_to: 'chef_container')
+                      !arg.nil? ? arg.to_sym : nil,
+                      equal_to: :chef_container)
       end
     end
   end

@@ -131,7 +131,7 @@ describe Omnijack::Project do
   describe '#project' do
     context 'no argument provided' do
       it 'returns the project' do
-        expect(obj.project).to eq('chefdk')
+        expect(obj.project).to eq(:chefdk)
       end
     end
 
@@ -141,9 +141,9 @@ describe Omnijack::Project do
         o.project('chefsalad') && o
       end
 
-      it 'uses the provided arg' do
-        expect(obj.project).to eq('chefsalad')
-        expect(obj.instance_variable_get(:@project)).to eq('chefsalad')
+      it 'uses the provided arg, symbolized' do
+        expect(obj.project).to eq(:chefsalad)
+        expect(obj.instance_variable_get(:@project)).to eq(:chefsalad)
       end
     end
 

@@ -24,10 +24,10 @@ describe Omnijack::Project::ChefDk do
 
   describe '#initialize' do
     context 'no additional args' do
-      it 'initializes a chefdk project' do
+      it 'initializes a chef_dk project' do
         res = obj
-        expect(res.project).to eq('chefdk')
-        expect(res.instance_variable_get(:@project)).to eq('chefdk')
+        expect(res.project).to eq(:chef_dk)
+        expect(res.instance_variable_get(:@project)).to eq(:chef_dk)
       end
     end
 
@@ -45,8 +45,8 @@ describe Omnijack::Project::ChefDk do
   end
 
   describe '#project' do
-    it 'returns chefdk' do
-      expect(obj.project).to eq('chefdk')
+    it 'returns chef_dk' do
+      expect(obj.project).to eq(:chef_dk)
     end
 
     it 'refuses attempts to override' do
