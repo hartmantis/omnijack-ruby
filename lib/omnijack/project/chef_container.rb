@@ -20,12 +20,12 @@ require_relative '../project'
 
 class Omnijack
   class Project
-    # A specialized class for the server project
+    # A specialized class for the container project
     #
     # @author Jonathan Hartman <j@p4nt5.com>
-    class Server < Project
+    class ChefContainer < Project
       def initialize(args = {})
-        super('server', args)
+        super('chef_container', args)
       end
 
       #
@@ -36,7 +36,7 @@ class Omnijack
       def project(arg = nil)
         set_or_return(:project,
                       arg,
-                      equal_to: 'server')
+                      equal_to: 'chef_container')
       end
     end
   end

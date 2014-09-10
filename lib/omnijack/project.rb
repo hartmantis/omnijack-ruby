@@ -26,8 +26,8 @@ require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
 require_relative 'project/angry_chef'
 require_relative 'project/chef'
 require_relative 'project/chef_dk'
-require_relative 'project/container'
-require_relative 'project/server'
+require_relative 'project/chef_container'
+require_relative 'project/chef_server'
 
 class Omnijack
   # A template for all the Omnitruck projects

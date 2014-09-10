@@ -17,17 +17,17 @@
 # limitations under the License.
 
 require_relative '../../spec_helper'
-require_relative '../../../lib/omnijack/project/container'
+require_relative '../../../lib/omnijack/project/chef_server'
 
-describe Omnijack::Project::Container do
+describe Omnijack::Project::ChefServer do
   let(:obj) { described_class.new }
 
   describe '#initialize' do
     context 'no additional args' do
-      it 'initializes a container project' do
+      it 'initializes a server project' do
         res = obj
-        expect(res.project).to eq('container')
-        expect(res.instance_variable_get(:@project)).to eq('container')
+        expect(res.project).to eq('chef_server')
+        expect(res.instance_variable_get(:@project)).to eq('chef_server')
       end
     end
 
@@ -45,8 +45,8 @@ describe Omnijack::Project::Container do
   end
 
   describe '#project' do
-    it 'returns container' do
-      expect(obj.project).to eq('container')
+    it 'returns server' do
+      expect(obj.project).to eq('chef_server')
     end
 
     it 'refuses attempts to override' do
