@@ -24,7 +24,7 @@ class Omnijack
     #
     # @author Jonathan Hartman <j@p4nt5.com>
     class Server < Project
-      def initialize(**args)
+      def initialize(args = {})
         super('server', args)
       end
 

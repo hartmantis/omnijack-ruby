@@ -37,7 +37,7 @@ class Omnijack
     include Helpers
 
     # TODO: Make project the static first arg since it's required
-    def initialize(project_arg, **args)
+    def initialize(project_arg, args = {})
       project(project_arg)
       [
         :base_url, :version, :prerelease, :nightlies, :platform,

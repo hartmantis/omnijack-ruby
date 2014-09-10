@@ -24,7 +24,7 @@ class Omnijack
     #
     # @author Jonathan Hartman <j@p4nt5.com>
     class Chef < Project
-      def initialize(**args)
+      def initialize(args = {})
         super('chef', args)
       end
 

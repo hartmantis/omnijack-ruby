@@ -32,7 +32,7 @@ class Omnijack
       [:url, :md5, :sha256, :yolo, :filename]
     end
 
-    def initialize(base_url, **args)
+    def initialize(base_url, args = {})
       @api_url = URI.parse("#{base_url}?" <<
                            args.map { |k, v| "#{k}=#{v}" }.join('&'))
       self

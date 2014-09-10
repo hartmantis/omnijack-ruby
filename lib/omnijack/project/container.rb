@@ -24,7 +24,7 @@ class Omnijack
     #
     # @author Jonathan Hartman <j@p4nt5.com>
     class Container < Project
-      def initialize(**args)
+      def initialize(args = {})
         super('container', args)
       end
 
