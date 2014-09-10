@@ -16,28 +16,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require_relative '../config'
 require_relative '../project'
 
-class Omnijack
-  class Project
-    # A specialized class for the chef project
-    #
-    # @author Jonathan Hartman <j@p4nt5.com>
-    class Chef < Project
-      def initialize(args = {})
-        super(:chef, args)
-      end
+# Dynamically define classes for each configured project
+#
+# @author Jonathan Hartman <j@p4nt5.com>
+Omnijack::Config::OMNITRUCK_PROJECTS.each do |project_name, _|
+  klass = Class.new(Omnijack::Project) do
+    define_method(:initialize) do |args = {}|
+      super(project_name, args)
+    end
 
-      #
-      # Override to prevent setting different projects
-      #
-      # @return [Symbol]
-      #
-      def project(arg = nil)
-        set_or_return(:project,
-                      !arg.nil? ? arg.to_sym : nil,
-                      equal_to: :chef)
-      end
+    # Override to prevent setting a different project
+    #
+    # @return [Symbol]
+    #
+    define_method(:project) do |arg = nil|
+      set_or_return(:project,
+                    !arg.nil? ? arg.to_sym : nil,
+                    equal_to: project_name)
     end
   end
+  class_name = project_name.to_s.split('_').map(&:capitalize).join
+  Omnijack::Project.const_set(class_name, klass)
 end

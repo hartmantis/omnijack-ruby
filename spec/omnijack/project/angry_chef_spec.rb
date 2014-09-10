@@ -17,7 +17,7 @@
 # limitations under the License.
 
 require_relative '../../spec_helper'
-require_relative '../../../lib/omnijack/project/angry_chef'
+require_relative '../../../lib/omnijack/project/metaprojects'
 
 describe Omnijack::Project::AngryChef do
   let(:obj) { described_class.new }

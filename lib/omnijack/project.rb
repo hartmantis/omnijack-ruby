@@ -18,16 +18,12 @@
 
 require 'ohai'
 require 'open-uri'
-require_relative 'helpers'
+require_relative 'config'
 require_relative 'list'
 require_relative 'metadata'
 require_relative '../../vendor/chef/lib/chef/exceptions'
 require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
-require_relative 'project/angry_chef'
-require_relative 'project/chef'
-require_relative 'project/chef_dk'
-require_relative 'project/chef_container'
-require_relative 'project/chef_server'
+require_relative 'project/metaprojects'
 
 class Omnijack
   # A template for all the Omnitruck projects
@@ -35,7 +31,7 @@ class Omnijack
   # @author Jonathan Hartman <j@p4nt5.com>
   class Project
     include ::Chef::Mixin::ParamsValidate
-    include Helpers
+    include Config
 
     def initialize(project_arg, args = {})
       project(project_arg)

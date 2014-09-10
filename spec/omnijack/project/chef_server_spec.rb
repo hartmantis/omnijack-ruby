@@ -17,7 +17,7 @@
 # limitations under the License.
 
 require_relative '../../spec_helper'
-require_relative '../../../lib/omnijack/project/chef_server'
+require_relative '../../../lib/omnijack/project/metaprojects'
 
 describe Omnijack::Project::ChefServer do
   let(:obj) { described_class.new }
