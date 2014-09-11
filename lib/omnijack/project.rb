@@ -25,11 +25,18 @@ require_relative '../../vendor/chef/lib/chef/exceptions'
 require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
 
 class Omnijack
-  # A template for all the Omnitruck projects
+  # A parent project that can contain metadata, a pkg list, and platforms
   #
   # @author Jonathan Hartman <j@p4nt5.com>
-  class Project < Omnijack
+  class Project
     include Config
+
+    def initialize(name, args = {})
+      @name = name.to_sym
+      @args = args
+    end
+    attr_reader :name, :args
+
     #
     # The Metadata instance for the project
     #
