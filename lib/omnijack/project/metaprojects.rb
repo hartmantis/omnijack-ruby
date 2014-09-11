@@ -19,6 +19,11 @@
 require_relative '../config'
 require_relative '../project'
 
+class Omnijack
+  class Project < Omnijack
+  end
+end
+
 # Dynamically define classes for each configured project
 #
 # @author Jonathan Hartman <j@p4nt5.com>

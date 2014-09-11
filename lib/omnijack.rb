@@ -16,8 +16,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative 'omnijack/helpers'
-require_relative 'omnijack/list'
-require_relative 'omnijack/metadata'
+require_relative '../vendor/chef/lib/chef/exceptions'
+require_relative '../vendor/chef/lib/chef/mixin/params_validate'
+require_relative 'omnijack/config'
 require_relative 'omnijack/project'
+require_relative 'omnijack/metadata'
+require_relative 'omnijack/list'
 require_relative 'omnijack/version'
+
+# Provide a base class with some commons everyone can inherit
+#
+# @author Jonathan Hartman <j@p4nt5.com>
+class Omnijack
+  include ::Chef::Mixin::ParamsValidate
+  include Config
+
+  def initialize(name, args = {})
+    @name = name.to_sym
+    args.each { |k, v| send(k, v) unless v.nil? } unless args.nil?
+  end
+  attr_reader :name
+
+  #
+  # The base URL of the Omnitruck API
+  #
+  # @param [String, NilClass] arg
+  # @return [String]
+  #
+  def base_url(arg = nil)
+    # TODO: Better URL validation
+    set_or_return(:base_url, arg, kind_of: String, default: DEFAULT_BASE_URL)
+  end
+
+  # TODO: Every class' `endpoint` method is similar enough they could go here
+end

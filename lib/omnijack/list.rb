@@ -18,17 +18,15 @@
 
 require 'json'
 require 'open-uri'
+require_relative 'config'
+require_relative '../omnijack'
 
 class Omnijack
   # A class for representing an Omnitruck full list object
   #
   # @author Jonathan Hartman <j@p4nt5.com>
-  class List
-    def initialize(api_url)
-      @api_url = URI.parse(api_url)
-      self
-    end
-    attr_reader :api_url
+  class List < Omnijack
+    include Config
 
     #
     # Make list items accessible via methods
@@ -76,6 +74,24 @@ class Omnijack
     #
     def raw_data
       @raw_data ||= api_url.open.read
+    end
+
+    #
+    # Construct the full API query URL from base + endpoint
+    #
+    # @return [URI::HTTP, URI::HTTPS]
+    #
+    def api_url
+      @api_url ||= URI.parse(::File.join(base_url, endpoint))
+    end
+
+    #
+    # Return the API endpoint for the package list of this project
+    #
+    # @return [String]
+    #
+    def endpoint
+      OMNITRUCK_PROJECTS[name][:endpoints][:package_list]
     end
   end
 end

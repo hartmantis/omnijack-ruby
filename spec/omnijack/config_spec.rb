@@ -34,7 +34,7 @@ describe Omnijack::Config do
     end
 
     described_class::OMNITRUCK_PROJECTS.each do |project, attrs|
-      attrs[:api_endpoints].each do |name, endpoint|
+      attrs[:endpoints].each do |name, endpoint|
         it "uses a valid #{project}::#{name} endpoint" do
           url = "http://www.getchef.com/chef#{endpoint}"
           url << '?v=latest&p=ubuntu&pv=12.04&m=x86_64' if name == :metadata

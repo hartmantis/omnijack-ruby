@@ -16,6 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require_relative '../../vendor/chef/lib/chef/exceptions'
+require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
+
 class Omnijack
   # Offer a config to base all the metaruby off of
   #
@@ -24,40 +27,41 @@ class Omnijack
     DEFAULT_BASE_URL ||= 'https://www.getchef.com/chef'
     OMNITRUCK_PROJECTS ||= {
       angry_chef: {
-        api_endpoints: {
+        endpoints: {
           metadata: '/metadata-angrychef',
           package_list: '/full_angrychef_list',
           platform_names: '/angrychef_platform_names'
         }
       },
       chef: {
-        api_endpoints: {
+        endpoints: {
           metadata: '/metadata',
           package_list: '/full_client_list',
           platform_names: '/chef_platform_names'
         }
       },
       chef_dk: {
-        api_endpoints: {
+        endpoints: {
           metadata: '/metadata-chefdk',
           package_list: '/full_chefdk_list',
           platform_names: '/chefdk_platform_names'
         }
       },
       chef_container: {
-        api_endpoints: {
+        endpoints: {
           metadata: '/metadata-container',
           package_list: '/full_container_list',
           platform_names: '/chef_container_platform_names'
         }
       },
       chef_server: {
-        api_endpoints: {
+        endpoints: {
           metadata: '/metadata-server',
           package_list: '/full_server_list',
           platform_names: '/chef_server_platform_names'
         }
       }
     }
+    METADATA_ATTRIBUTES ||= [:url, :md5, :sha256, :yolo]
   end
 end

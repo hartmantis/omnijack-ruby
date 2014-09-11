@@ -20,16 +20,8 @@ require_relative '../spec_helper'
 require_relative '../../lib/omnijack/list'
 
 describe Omnijack::List do
-  let(:api_url) { 'http://www.example.com' }
-  let(:obj) { described_class.new(api_url) }
-
-  describe '#initialize' do
-    it 'sets the API URL' do
-      [obj.api_url, obj.instance_variable_get(:@api_url)].each do |i|
-        expect(i).to eq(URI.parse("#{api_url}"))
-      end
-    end
-  end
+  let(:name) { :chef_dk }
+  let(:obj) { described_class.new(name) }
 
   describe '#method_missing' do
     let(:to_h) { { thing1: 'yup', thing2: 'nope', thing3: 'maybe' } }
@@ -78,9 +70,7 @@ describe Omnijack::List do
     end
 
     context 'real data' do
-      let(:obj) do
-        described_class.new('https://www.getchef.com/chef/full_client_list')
-      end
+      let(:obj) { described_class.new(:chef) }
 
       it 'returns the expected data' do
         expected = '/el/6/i686/chef-10.12.0-1.el6.i686.rpm'
@@ -114,6 +104,30 @@ describe Omnijack::List do
       res = obj
       expect(res.send(:raw_data)).to eq(read)
       expect(res.instance_variable_get(:@raw_data)).to eq(read)
+    end
+  end
+
+  describe '#api_url' do
+    let(:base_url) { 'http://example.com/chef' }
+    let(:endpoint) { '/example_list' }
+
+    before(:each) do
+      [:base_url, :endpoint].each do |i|
+        allow_any_instance_of(described_class).to receive(i).and_return(send(i))
+      end
+    end
+
+    it 'constructs a URL based on base + endpoint' do
+      expected = URI.parse('http://example.com/chef/example_list')
+      expect(obj.send(:api_url)).to eq(expected)
+    end
+  end
+
+  describe '#endpoint' do
+    let(:name) { :chef_container }
+
+    it 'returns the appropriate metadata endpoint' do
+      expect(obj.send(:endpoint)).to eq('/full_container_list')
     end
   end
 end

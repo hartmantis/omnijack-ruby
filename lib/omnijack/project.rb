@@ -16,34 +16,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'ohai'
-require 'open-uri'
+require_relative '../omnijack'
 require_relative 'config'
 require_relative 'list'
 require_relative 'metadata'
+require_relative 'project/metaprojects'
 require_relative '../../vendor/chef/lib/chef/exceptions'
 require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
-require_relative 'project/metaprojects'
 
 class Omnijack
   # A template for all the Omnitruck projects
   #
   # @author Jonathan Hartman <j@p4nt5.com>
-  class Project
-    include ::Chef::Mixin::ParamsValidate
+  class Project < Omnijack
     include Config
-
-    def initialize(project_arg, args = {})
-      project(project_arg)
-      [
-        :base_url, :version, :prerelease, :nightlies, :platform,
-        :platform_version, :machine_arch
-      ].each do |i|
-        send(i, args[i]) unless args[i].nil?
-      end
-      self
-    end
-
     #
     # The Metadata instance for the project
     #
@@ -51,13 +37,7 @@ class Omnijack
     #
     def metadata
       # TODO: This requires too much knowledge of the Metadata class
-      @metadata ||= Metadata.new(URI("#{base_url}/metadata-#{project}").to_s,
-                                 v: version,
-                                 prerelease: prerelease,
-                                 nightlies: nightlies,
-                                 p: platform,
-                                 pv: platform_version,
-                                 m: machine_arch)
+      @metadata ||= Metadata.new(name, args)
     end
 
     #
@@ -66,166 +46,16 @@ class Omnijack
     # @return [Omnijack::List]
     #
     def list
-      @list ||= List.new(URI("#{base_url}/full_#{project}_list").to_s)
+      @list ||= List.new(name, args)
     end
 
     #
-    # The base URL for the API
+    # The platform names instance for the project
     #
-    # @param [String, NilClass] arg
-    # @return [String]
+    # @return [Omnijack::Platforms]
     #
-    def base_url(arg = nil)
-      # TODO: Better URL validation
-      set_or_return(:base_url, arg, kind_of: String, default: DEFAULT_BASE_URL)
-    end
-
-    #
-    # The name of the project
-    #
-    # @param [String, Symbol, NilClass] arg
-    # @return [Symbol]
-    #
-    def project(arg = nil)
-      set_or_return(:project,
-                    !arg.nil? ? arg.to_sym : nil,
-                    kind_of: Symbol,
-                    required: true)
-    end
-
-    #
-    # The version of the project
-    #
-    # @param [String, NilClass] arg
-    # @return [String]
-    #
-    def version(arg = nil)
-      set_or_return(:version,
-                    arg,
-                    kind_of: String,
-                    default: 'latest',
-                    callbacks: {
-                      'Invalid version string' => ->(a) { valid_version?(a) }
-                    })
-    end
-
-    #
-    # Whether to enable prerelease packages
-    #
-    # @param [TrueClass, FalseClass, NilClass] arg
-    # @return [TrueClass, FalseClass]
-    #
-    def prerelease(arg = nil)
-      set_or_return(:prerelease,
-                    arg,
-                    kind_of: [TrueClass, FalseClass],
-                    default: false)
-    end
-
-    #
-    # Whether to enable nightly packages
-    #
-    # @param [TrueClass, FalseClass, NilClass] arg
-    # @return [TrueClass, FalseClass]
-    #
-    def nightlies(arg = nil)
-      set_or_return(:nightlies,
-                    arg,
-                    kind_of: [TrueClass, FalseClass],
-                    default: false)
-    end
-
-    #
-    # The name of the desired platform
-    #
-    # @param [String, NilClass]
-    # @return [String]
-    #
-    def platform(arg = nil)
-      set_or_return(:platform, arg, kind_of: String, default: node[:platform])
-    end
-
-    #
-    # The version of the desired platform
-    #
-    # @param [String, NilClass] arg
-    # @return [String]
-    #
-    def platform_version(arg = nil)
-      # TODO: The platform version parser living in `node` means passing e.g.
-      # '10.9.2' here won't result in it being shortened to '10.9'
-      set_or_return(:platform_version,
-                    arg,
-                    kind_of: String,
-                    default: node[:platform_version])
-    end
-
-    #
-    # The machine architecture of the desired platform
-    #
-    # @param [String, NilClass]
-    # @return [String]
-    #
-    def machine_arch(arg = nil)
-      set_or_return(:machine_arch,
-                    arg,
-                    kind_of: String,
-                    default: node[:kernel][:machine])
-    end
-
-    private
-
-    #
-    # Fetch and return node data from Ohai
-    #
-    # @return [Mash]
-    #
-    def node
-      unless @node
-        @node = Ohai::System.new.all_plugins('platform')[0].data
-        case @node[:platform]
-        when 'mac_os_x'
-          @node[:platform_version] = platform_version_mac_os_x
-        when 'windows'
-          @node[:platform_version] = platform_version_windows
-        end
-      end
-      @node
-    end
-
-    #
-    # Apply special logic for the version of an OS X platform
-    #
-    # @return [String]
-    #
-    def platform_version_mac_os_x
-      node[:platform_version].match(/^[0-9]+\.[0-9]+/).to_s
-    end
-
-    #
-    # Apply special logic for the version of a Windows platform
-    #
-    # @return [String]
-    #
-    def platform_version_windows
-      # Make a best guess and assume a server OS
-      # See: http://msdn.microsoft.com/en-us/library/windows/
-      #      desktop/ms724832(v=vs.85).aspx
-      {
-        '6.3' => '2012r2', '6.2' => '2012', '6.1' => '2008r2', '6.0' => '2008',
-        '5.2' => '2003r2', '5.1' => 'xp', '5.0' => '2000'
-      }[node[:platform_version].match(/^[0-9]+\.[0-9]+/).to_s]
-    end
-
-    #
-    # Determine whether a string is a valid version string
-    #
-    # @param [String] arg
-    # @return [TrueClass, FalseClass]
-    #
-    def valid_version?(arg)
-      return true if arg == 'latest'
-      arg.match(/^[0-9]+\.[0-9]+\.[0-9]+(-[0-9]+)?$/) ? true : false
-    end
+    # def platforms
+    #   @platforms ||= Platforms.new(name, args)
+    # end
   end
 end
