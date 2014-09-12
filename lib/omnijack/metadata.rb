@@ -20,8 +20,6 @@ require 'ohai'
 require 'open-uri'
 require_relative 'config'
 require_relative '../omnijack'
-require_relative '../../vendor/chef/lib/chef/exceptions'
-require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
 
 class Omnijack
   # A class for representing an Omnitruck metadata object

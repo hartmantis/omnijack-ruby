@@ -22,8 +22,6 @@ require_relative 'list'
 require_relative 'metadata'
 require_relative 'platforms'
 require_relative 'project/metaprojects'
-require_relative '../../vendor/chef/lib/chef/exceptions'
-require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
 
 class Omnijack
   # A parent project that can contain metadata, a pkg list, and platforms

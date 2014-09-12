@@ -16,8 +16,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative '../vendor/chef/lib/chef/exceptions'
-require_relative '../vendor/chef/lib/chef/mixin/params_validate'
+unless Module.const_defined?(:Chef)
+  require_relative '../vendor/chef/lib/chef/exceptions'
+  require_relative '../vendor/chef/lib/chef/mixin/params_validate'
+end
 require_relative 'omnijack/config'
 require_relative 'omnijack/project'
 require_relative 'omnijack/list'
