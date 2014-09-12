@@ -35,8 +35,8 @@ class Omnijack
     #
     # @param [Symbol] method_id
     #
-    def method_missing(method_id)
-      to_h[method_id] || super
+    def method_missing(method_id, args = nil)
+      args.nil? && to_h[method_id] || super
     end
 
     #
