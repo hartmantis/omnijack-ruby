@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.version       = Omnijack::VERSION
   spec.authors       = ['Jonathan Hartman']
   spec.email         = %w(j@p4nt5.com)
-  spec.summary       = "A Ruby interface to Chef's Omnitruck API"
-  spec.description   = "A Ruby interface to Chef's Omnitruck API"
+  spec.summary       = 'A pallet jack to unload data from the Omnitruck'
+  spec.description   = 'A pallet jack to unload data from the Omnitruck'
   spec.homepage      = 'https://rubygems.org/gems/omnijack'
   spec.license       = 'Apache v2.0'
 

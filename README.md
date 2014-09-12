@@ -16,8 +16,6 @@ Omnijack
 A Ruby client interface to Chef's
 [Omnitruck](https://github.com/opscode/opscode-omnitruck) API.
 
-A pallet jack to get the boxes out of the Omnitruck.
-
 Installation
 ------------
 
