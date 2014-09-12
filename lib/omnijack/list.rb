@@ -60,10 +60,7 @@ class Omnijack
     #
     # Use the raw data string as a string representation
     #
-    #
-    def to_s
-      raw_data
-    end
+    define_method(:to_s) { raw_data }
 
     private
 

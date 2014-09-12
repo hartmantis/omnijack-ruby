@@ -75,10 +75,7 @@ class Omnijack
     #
     # Use the raw metadata string as a string representation
     #
-    #
-    def to_s
-      raw_metadata
-    end
+    define_method(:to_s) { raw_metadata }
 
     #
     # The version of the project
@@ -164,8 +161,7 @@ class Omnijack
     #
     def api_url
       @api_url ||= URI.parse(
-        ::File.join(base_url,
-                    "#{endpoint}?#{URI.encode_www_form(query_params)}")
+        File.join(base_url, "#{endpoint}?#{URI.encode_www_form(query_params)}")
       )
     end
 
