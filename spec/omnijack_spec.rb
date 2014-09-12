@@ -21,25 +21,45 @@ require_relative '../lib/omnijack'
 
 describe Omnijack do
   let(:name) { :chef_dk }
-  let(:obj) { described_class.new(name) }
+  let(:args) { nil }
+  let(:obj) { described_class.new(name, args) }
 
   describe '#initialize' do
-    context 'no args provided' do
-      it 'is called successfully' do
-        expect(obj).to be_an_instance_of(described_class)
+    shared_examples_for 'any context' do
+      it 'sets the project name' do
+        expect(obj.name).to eq(:chef_dk)
+        expect(obj.instance_variable_get(:@name)).to eq(:chef_dk)
       end
     end
 
-    {
-      base_url: 'https://example.com'
-    }.each do |k, v|
-      context "a #{k} arg provided" do
-        let(:obj) { described_class.new('cocinero', k => v) }
+    context 'no args provided' do
+      let(:obj) { described_class.new(name) }
 
-        it 'sets the given arg' do
-          expect(obj.send(k)).to eq(v)
-          expect(obj.instance_variable_get(:"@#{k}")).to eq(v)
-        end
+      it_behaves_like 'any context'
+
+      it 'holds an empty hash for the args' do
+        expect(obj.args).to eq({})
+        expect(obj.instance_variable_get(:@args)).to eq({})
+      end
+    end
+
+    context 'some additional args' do
+      let(:args) { { pants: 'off', shorts: 'on' } }
+
+      it_behaves_like 'any context'
+
+      it 'holds onto the args' do
+        expect(obj.args).to eq(args)
+        expect(obj.instance_variable_get(:@args)).to eq(args)
+      end
+    end
+
+    context 'a base_url arg provided' do
+      let(:args) { { base_url: 'https://example.com' } }
+
+      it 'sets the given arg' do
+        expect(obj.send(:base_url)).to eq(args[:base_url])
+        expect(obj.instance_variable_get(:@base_url)).to eq(args[:base_url])
       end
     end
   end

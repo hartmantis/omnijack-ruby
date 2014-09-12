@@ -20,7 +20,7 @@ require_relative '../config'
 require_relative '../project'
 
 class Omnijack
-  class Project
+  class Project < Omnijack
   end
 end
 

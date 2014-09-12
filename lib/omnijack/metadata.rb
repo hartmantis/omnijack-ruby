@@ -31,6 +31,11 @@ class Omnijack
     include ::Chef::Mixin::ParamsValidate
     include Config
 
+    def initialize(name, args = {})
+      super
+      args.each { |k, v| send(k, v) unless v.nil? } unless args.nil?
+    end
+
     #
     # Set up an accessor method for each piece of metadata
     #

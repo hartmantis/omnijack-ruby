@@ -34,9 +34,10 @@ class Omnijack
 
   def initialize(name, args = {})
     @name = name.to_sym
-    args.each { |k, v| send(k, v) unless v.nil? } unless args.nil?
+    @args = args
+    base_url(args[:base_url]) if args && args[:base_url]
   end
-  attr_reader :name
+  attr_reader :name, :args
 
   #
   # The base URL of the Omnitruck API

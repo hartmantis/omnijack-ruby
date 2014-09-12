@@ -23,32 +23,6 @@ describe Omnijack::Project do
   let(:args) { nil }
   let(:obj) { described_class.new(:chef_dk, args) }
 
-  describe '#initialize' do
-    shared_examples_for 'any context' do
-      it 'sets the project name' do
-        expect(obj.name).to eq(:chef_dk)
-        expect(obj.instance_variable_get(:@name)).to eq(:chef_dk)
-      end
-    end
-
-    context 'no additional args' do
-      let(:args) { nil }
-
-      it_behaves_like 'any context'
-    end
-
-    context 'some additional args' do
-      let(:args) { { pants: 'off', shorts: 'on' } }
-
-      it_behaves_like 'any context'
-
-      it 'saves the args for the child classes' do
-        expect(obj.args).to eq(args)
-        expect(obj.instance_variable_get(:@args)).to eq(args)
-      end
-    end
-  end
-
   describe '#list' do
     it 'returns a List object' do
       res = obj

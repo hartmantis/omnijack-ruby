@@ -29,14 +29,8 @@ class Omnijack
   # A parent project that can contain metadata, a pkg list, and platforms
   #
   # @author Jonathan Hartman <j@p4nt5.com>
-  class Project
+  class Project < Omnijack
     include Config
-
-    def initialize(name, args = {})
-      @name = name.to_sym
-      @args = args
-    end
-    attr_reader :name, :args
 
     #
     # The Metadata instance for the project

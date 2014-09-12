@@ -25,6 +25,31 @@ describe Omnijack::Metadata do
   let(:args) { nil }
   let(:obj) { described_class.new(name, args) }
 
+  describe '#initialize' do
+    {
+      platform: 'linspire',
+      platform_version: '3.3.3',
+      machine_arch: 'risc'
+    }.each do |k, v|
+      context "a #{k} arg provided" do
+        let(:args) { { k => v } }
+
+        it 'sets the given arg' do
+          expect(obj.send(k)).to eq(v)
+          expect(obj.instance_variable_get(:"@#{k}")).to eq(v)
+        end
+      end
+    end
+
+    context 'an invalid arg provided' do
+      let(:args) { { potatoes: 'peeled' } }
+
+      it 'raises an exception' do
+        expect { obj }.to raise_error(NoMethodError)
+      end
+    end
+  end
+
   [:url, :md5, :sha256, :yolo, :filename].each do |i|
     describe "##{i}" do
       before(:each) do
