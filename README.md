@@ -5,7 +5,7 @@ Omnijack
 [![Build Status](http://img.shields.io/travis/RoboticCheese/omnijack-ruby.svg)][travis]
 [![Code Climate](http://img.shields.io/codeclimate/github/kabisaict/flow.svg)][codeclimate]
 [![Coverage Status](http://img.shields.io/coveralls/RoboticCheese/omnijack-ruby.svg)][coveralls]
-[![Dependency Status](http://img.shields.io/gemnasium/RoboticCheese/omnijack.svg)][gemnasium]
+[![Dependency Status](http://img.shields.io/gemnasium/RoboticCheese/omnijack-ruby.svg)][gemnasium]
 
 [fury]: http://badge.fury.io/rb/omnijack
 [travis]: http://travis-ci.org/RoboticCheese/omnijack-ruby
