@@ -1,6 +1,9 @@
 Omnijack Gem CHANGELOG
 ======================
 
+v?.?.? (????-??-??)
+-------------------
+
 v0.1.1 (2014-09-12)
 -------------------
 - Don't load vendored Chef classes if Chef itself is already loaded
