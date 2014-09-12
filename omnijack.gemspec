@@ -33,4 +33,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'simplecov-console'
   spec.add_development_dependency 'coveralls'
+  spec.add_development_dependency 'cucumber'
 end
