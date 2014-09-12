@@ -4,6 +4,7 @@ require 'bundler/setup'
 require 'rubocop/rake_task'
 require 'cane/rake_task'
 require 'rspec/core/rake_task'
+require 'cucumber/rake/task'
 
 Cane::RakeTask.new
 
@@ -17,4 +18,6 @@ end
 
 RSpec::Core::RakeTask.new(:spec)
 
-task default: [:cane, :rubocop, :loc, :spec]
+Cucumber::Rake::Task.new(:features)
+
+task default: [:cane, :rubocop, :loc, :spec, :features]
