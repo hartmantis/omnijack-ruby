@@ -20,7 +20,7 @@ require_relative '../config'
 require_relative '../project'
 
 class Omnijack
-  class Project < Omnijack
+  class Project
   end
 end
 
@@ -31,16 +31,6 @@ Omnijack::Config::OMNITRUCK_PROJECTS.each do |project_name, _|
   klass = Class.new(Omnijack::Project) do
     define_method(:initialize) do |args = {}|
       super(project_name, args)
-    end
-
-    # Override to prevent setting a different project
-    #
-    # @return [Symbol]
-    #
-    define_method(:project) do |arg = nil|
-      set_or_return(:project,
-                    !arg.nil? ? arg.to_sym : nil,
-                    equal_to: project_name)
     end
   end
   class_name = project_name.to_s.split('_').map(&:capitalize).join

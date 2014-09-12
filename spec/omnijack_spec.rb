@@ -16,11 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative '../spec_helper'
-require_relative '../../lib/omnijack/project'
+require_relative 'spec_helper'
+require_relative '../lib/omnijack'
 
 describe Omnijack do
-  let(:obj) { described_class.new('chefdk') }
+  let(:name) { :chef_dk }
+  let(:obj) { described_class.new(name) }
 
   describe '#initialize' do
     context 'no args provided' do
@@ -30,7 +31,7 @@ describe Omnijack do
     end
 
     {
-      base_url: 'https://example.com',
+      base_url: 'https://example.com'
     }.each do |k, v|
       context "a #{k} arg provided" do
         let(:obj) { described_class.new('cocinero', k => v) }
@@ -79,33 +80,10 @@ describe Omnijack do
   end
 
   describe '#name' do
-    context 'no argument provided' do
-      it 'returns the project name' do
-        expect(obj.name.to eq(:chefdk)
-      end
-    end
+    let(:name) { 'chef_container' }
 
-    context 'a valid argument provided' do
-      let(:obj) do
-        o = super()
-        o.name('chefsalad') && o
-      end
-
-      it 'uses the provided arg, symbolized' do
-        expect(obj.name).to eq(:chefsalad)
-        expect(obj.instance_variable_get(:@name)).to eq(:chefsalad)
-      end
-    end
-
-    context 'an invalid argument provided' do
-      let(:obj) do
-        o = super()
-        o.name(true) && o
-      end
-
-      it 'raises an exception' do
-        expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
-      end
+    it 'returns the project name, symbolized' do
+      expect(obj.name).to eq(:chef_container)
     end
   end
 end

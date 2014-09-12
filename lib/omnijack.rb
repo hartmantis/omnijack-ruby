@@ -20,8 +20,9 @@ require_relative '../vendor/chef/lib/chef/exceptions'
 require_relative '../vendor/chef/lib/chef/mixin/params_validate'
 require_relative 'omnijack/config'
 require_relative 'omnijack/project'
-require_relative 'omnijack/metadata'
 require_relative 'omnijack/list'
+require_relative 'omnijack/metadata'
+require_relative 'omnijack/platforms'
 require_relative 'omnijack/version'
 
 # Provide a base class with some commons everyone can inherit

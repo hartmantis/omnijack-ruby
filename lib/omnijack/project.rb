@@ -20,6 +20,7 @@ require_relative '../omnijack'
 require_relative 'config'
 require_relative 'list'
 require_relative 'metadata'
+require_relative 'platforms'
 require_relative 'project/metaprojects'
 require_relative '../../vendor/chef/lib/chef/exceptions'
 require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
@@ -61,8 +62,8 @@ class Omnijack
     #
     # @return [Omnijack::Platforms]
     #
-    # def platforms
-    #   @platforms ||= Platforms.new(name, args)
-    # end
+    def platforms
+      @platforms ||= Platforms.new(name, args)
+    end
   end
 end

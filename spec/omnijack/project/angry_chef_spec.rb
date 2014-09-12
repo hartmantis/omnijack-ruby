@@ -20,37 +20,36 @@ require_relative '../../spec_helper'
 require_relative '../../../lib/omnijack/project/metaprojects'
 
 describe Omnijack::Project::AngryChef do
-  let(:obj) { described_class.new }
+  let(:args) { nil }
+  let(:obj) { described_class.new(args) }
 
   describe '#initialize' do
     context 'no additional args' do
-      it 'initializes an angrychef project' do
+      it 'initializes an angry_chef project' do
         res = obj
-        expect(res.project).to eq(:angry_chef)
-        expect(res.instance_variable_get(:@project)).to eq(:angry_chef)
+        expect(res.name).to eq(:angry_chef)
+        expect(res.instance_variable_get(:@name)).to eq(:angry_chef)
       end
     end
 
     context 'some additional args' do
-      let(:obj) { described_class.new(version: '6.6.6', prerelease: true) }
+      let(:args) { { version: '6.6.6', prerelease: true } }
 
-      it 'passes those args on to the superclass' do
+      it 'holds onto those args' do
         res = obj
-        expect(res.version).to eq('6.6.6')
-        expect(res.instance_variable_get(:@version)).to eq('6.6.6')
-        expect(res.prerelease).to eq(true)
-        expect(res.instance_variable_get(:@prerelease)).to eq(true)
+        expect(res.args).to eq(args)
+        expect(res.instance_variable_get(:@args)).to eq(args)
       end
     end
   end
 
-  describe '#project' do
-    it 'returns angrychef' do
-      expect(obj.project).to eq(:angry_chef)
+  describe '#name' do
+    it 'returns angry_chef' do
+      expect(obj.name).to eq(:angry_chef)
     end
 
     it 'refuses attempts to override' do
-      expect { obj.project('bad') }.to raise_error
+      expect { obj.name('bad') }.to raise_error
     end
   end
 end

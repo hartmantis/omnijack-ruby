@@ -67,12 +67,12 @@ describe Omnijack::Project do
     end
   end
 
-  # describe '#platforms' do
-  #   it 'returns a Platforms object' do
-  #     res = obj
-  #     [res.platforms, res.instance_variable_get(:@platforms)].each do |i|
-  #       expect(i).to be_an_instance_of(Omnijack::Platforms)
-  #     end
-  #   end
-  # end
+  describe '#platforms' do
+    it 'returns a Platforms object' do
+      res = obj
+      [res.platforms, res.instance_variable_get(:@platforms)].each do |i|
+        expect(i).to be_an_instance_of(Omnijack::Platforms)
+      end
+    end
+  end
 end
