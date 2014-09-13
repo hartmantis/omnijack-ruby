@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = %w(j@p4nt5.com)
   spec.summary       = 'A pallet jack to unload data from the Omnitruck'
   spec.description   = 'A pallet jack to unload data from the Omnitruck'
-  spec.homepage      = 'https://rubygems.org/gems/omnijack'
+  spec.homepage      = 'https://github.com/RoboticCheese/omnijack-ruby'
   spec.license       = 'Apache v2.0'
 
   spec.files         = `git ls-files -z`.split("\x0")
