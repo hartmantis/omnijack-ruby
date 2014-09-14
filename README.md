@@ -86,6 +86,20 @@ Omnijack::Project::ChefDk.new(
 )
 ```
 
+Getting the Chef project's list of packages:
+
+```ruby
+list = Omnijack::Project::Chef.new.list
+puts list.to_h
+```
+
+Getting the Chef project's platform mappings:
+
+```ruby
+platforms = Omnijack::Project::Chef.new.platforms
+puts platforms.to_h
+```
+
 Getting AngryChef project data:
 
 ```ruby
