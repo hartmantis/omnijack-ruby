@@ -66,7 +66,7 @@ class Omnijack
               else line.split[1]
               end
         hsh[key] = val
-        hsh[:filename] = val.split('/')[-1] if key == :url
+        hsh[:filename] = URI.decode(val).split('/')[-1] if key == :url
       end
     end
 
