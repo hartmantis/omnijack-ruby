@@ -1,7 +1,7 @@
 Omnijack Gem CHANGELOG
 ======================
 
-v?.?.? (????-??-??)
+v0.1.2 (2014-09-17)
 -------------------
 - Fix encoding issue with incorrect filename for nightly build packages
 
