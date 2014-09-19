@@ -1,6 +1,9 @@
 Omnijack Gem CHANGELOG
 ======================
 
+v?.?.? (????-??-??)
+-------------------
+
 v0.2.0 (2014-09-19)
 -------------------
 - Calculate and expose version and build numbers as part of metadata

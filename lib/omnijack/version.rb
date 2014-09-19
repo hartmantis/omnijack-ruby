@@ -20,5 +20,5 @@
 #
 # @author Jonathan Hartman <j@p4nt5.com>
 class Omnijack
-  VERSION = '0.2.0'
+  VERSION = '0.2.1.dev'
 end
