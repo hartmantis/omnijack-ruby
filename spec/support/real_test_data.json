@@ -7,6 +7,8 @@
     "expected": {
       "url": "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.2.2-1_amd64.deb",
       "filename": "chefdk_0.2.2-1_amd64.deb",
+      "version": "0.2.2",
+      "build": "1",
       "md5": "1b097776840aa10f092063d1579bf155",
       "sha256": "a6384851473779d3b0d0bedc509607b924751ea3b356e7df4b9c7ab16dd25788"
     }
@@ -19,6 +21,8 @@
     "expected": {
       "url": "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.1.0-1_amd64.deb",
       "filename": "chefdk_0.1.0-1_amd64.deb",
+      "version": "0.1.0",
+      "build": "1",
       "md5": "f7d53114f96e927261b4b2a2ecd3f232",
       "sha256": "0d66b93b62a24bd9c9735eefb4cd547bdf441f4a95effdfa068608c3821f85cb"
     }
@@ -36,10 +40,12 @@
     "prerelease": false,
     "nightlies": true,
     "expected": {
-      "url": "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.2.2%2B20140917085111.git.23.997cf31-1_amd64.deb",
-      "filename": "chefdk_0.2.2+20140917085111.git.23.997cf31-1_amd64.deb",
-      "md5": "03af55494419a3b3b32617fb76141ffc",
-      "sha256": "e16c8d8cb594fe0fa82489d348af258f94e3e68ad8392bec31e3f12b5fd80285"
+      "url": "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.2.2%2B20140918085104.git.23.997cf31-1_amd64.deb",
+      "filename": "chefdk_0.2.2+20140918085104.git.23.997cf31-1_amd64.deb",
+      "version": "0.2.2+20140918085104.git.23.997cf31",
+      "build": "1",
+      "md5": "424793c215d387041a9d620eeab1ed34",
+      "sha256": "801d36aa94aa452dbe81c05eb4422fb022e2e7cba3d35a67f02cfa7416ac628f"
     }
   },
   {
@@ -50,6 +56,8 @@
     "expected": {
       "url": "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.2.2-1_amd64.deb",
       "filename": "chefdk_0.2.2-1_amd64.deb",
+      "version": "0.2.2",
+      "build": "1",
       "md5": "1b097776840aa10f092063d1579bf155",
       "sha256": "a6384851473779d3b0d0bedc509607b924751ea3b356e7df4b9c7ab16dd25788"
     }
@@ -62,6 +70,8 @@
     "expected": {
       "url": "https://opscode-omnibus-packages.s3.amazonaws.com/mac_os_x/10.8/x86_64/chefdk-0.2.2-1.dmg",
       "filename": "chefdk-0.2.2-1.dmg",
+      "version": "0.2.2",
+      "build": "1",
       "md5": "2d0d8881ef6b0cdcbaedfacac2d5129d",
       "sha256": "4922390a2dc08c26947fe8ed94a3a1777bd820e0e409e4072b2fb1315f4425d5"
     }
@@ -74,6 +84,8 @@
     "expected": {
       "url": "https://opscode-omnibus-packages.s3.amazonaws.com/mac_os_x/10.8/x86_64/chefdk-0.2.2-1.dmg",
       "filename": "chefdk-0.2.2-1.dmg",
+      "version": "0.2.2",
+      "build": "1",
       "md5": "2d0d8881ef6b0cdcbaedfacac2d5129d",
       "sha256": "4922390a2dc08c26947fe8ed94a3a1777bd820e0e409e4072b2fb1315f4425d5"
     }
@@ -86,6 +98,8 @@
     "expected": {
       "url": "https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chefdk-0.2.2-1.x86_64.rpm",
       "filename": "chefdk-0.2.2-1.x86_64.rpm",
+      "version": "0.2.2",
+      "build": "1",
       "md5": "5da3f329f7e6d51e778212dea4dae73f",
       "sha256": "2bc4c5c6f82ee7abed385d837e526fd40777ddc47ad939e4f3ecea625b43a245"
     }
@@ -98,6 +112,8 @@
     "expected": {
       "url": "https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chefdk-0.2.2-1.x86_64.rpm",
       "filename": "chefdk-0.2.2-1.x86_64.rpm",
+      "version": "0.2.2",
+      "build": "1",
       "md5": "5da3f329f7e6d51e778212dea4dae73f",
       "sha256": "2bc4c5c6f82ee7abed385d837e526fd40777ddc47ad939e4f3ecea625b43a245",
       "yolo": true
@@ -111,6 +127,8 @@
     "expected": {
       "url": "https://opscode-omnibus-packages.s3.amazonaws.com/windows/2008r2/x86_64/chefdk-0.2.2-1.msi",
       "filename": "chefdk-0.2.2-1.msi",
+      "version": "0.2.2",
+      "build": "1",
       "md5": "21f9af35451a0116b72531f06e93eb05",
       "sha256": "76038621bad5333b9ceee4dc32325cf2a880fa69ef64a9225d91ab1788c37a53"
     }
@@ -123,6 +141,8 @@
     "expected": {
       "url": "https://opscode-omnibus-packages.s3.amazonaws.com/windows/2008r2/x86_64/chefdk-0.2.2-1.msi",
       "filename": "chefdk-0.2.2-1.msi",
+      "version": "0.2.2",
+      "build": "1",
       "md5": "21f9af35451a0116b72531f06e93eb05",
       "sha256": "76038621bad5333b9ceee4dc32325cf2a880fa69ef64a9225d91ab1788c37a53",
       "yolo": true

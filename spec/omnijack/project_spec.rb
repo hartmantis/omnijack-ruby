@@ -33,6 +33,11 @@ describe Omnijack::Project do
   end
 
   describe '#metadata' do
+    before(:each) do
+      allow_any_instance_of(Omnijack::Metadata).to receive(:to_h)
+        .and_return(true)
+    end
+
     it 'returns a Metadata object' do
       res = obj
       [res.metadata, res.instance_variable_get(:@metadata)].each do |i|
