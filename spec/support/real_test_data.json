@@ -40,12 +40,12 @@
     "prerelease": false,
     "nightlies": true,
     "expected": {
-      "url": "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.2.2%2B20140918085104.git.23.997cf31-1_amd64.deb",
-      "filename": "chefdk_0.2.2+20140918085104.git.23.997cf31-1_amd64.deb",
-      "version": "0.2.2+20140918085104.git.23.997cf31",
+      "url": "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.2.2%2B20140919085101.git.23.997cf31-1_amd64.deb",
+      "filename": "chefdk_0.2.2+20140919085101.git.23.997cf31-1_amd64.deb",
+      "version": "0.2.2+20140919085101.git.23.997cf31",
       "build": "1",
-      "md5": "424793c215d387041a9d620eeab1ed34",
-      "sha256": "801d36aa94aa452dbe81c05eb4422fb022e2e7cba3d35a67f02cfa7416ac628f"
+      "md5": "81c5907587c7ee0b665d75a6dc0beed4",
+      "sha256": "65eca11802f0bbb33f559e6a55239a0b1289d3ec6319f6f089b1d476b39c1337"
     }
   },
   {
