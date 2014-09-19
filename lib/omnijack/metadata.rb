@@ -32,6 +32,7 @@ class Omnijack
     def initialize(name, args = {})
       super
       args.each { |k, v| send(k, v) unless v.nil? } unless args.nil?
+      to_h
     end
 
     #
@@ -41,6 +42,7 @@ class Omnijack
       define_method(a) { to_h[a] }
     end
     define_method(:filename) { to_h[:filename] }
+    define_method(:build) { to_h[:build] }
 
     #
     # Make metadata accessible via hash keys
@@ -60,13 +62,11 @@ class Omnijack
     def to_h
       raw_metadata.split("\n").each_with_object({}) do |line, hsh|
         key = line.split[0].to_sym
-        val = case line.split[1]
-              when 'true' then true
-              when 'false' then false
-              else line.split[1]
-              end
+        val = line.split[1]
+        val = true if val == 'true'
+        val = false if val == 'false'
         hsh[key] = val
-        hsh[:filename] = URI.decode(val).split('/')[-1] if key == :url
+        key == :url && hsh.merge!(parse_url_data(val)) && version(hsh[:version])
       end
     end
 
@@ -82,13 +82,7 @@ class Omnijack
     # @return [String]
     #
     def version(arg = nil)
-      set_or_return(:version,
-                    arg,
-                    kind_of: String,
-                    default: 'latest',
-                    callbacks: {
-                      'Invalid version string' => ->(a) { valid_version?(a) }
-                    })
+      set_or_return(:version, arg, kind_of: String, default: 'latest')
     end
 
     #
@@ -229,14 +223,16 @@ class Omnijack
     end
 
     #
-    # Determine whether a string is a valid version string
+    # Extract a filename, package version, and build from a package URL
     #
-    # @param [String] arg
-    # @return [TrueClass, FalseClass]
+    # @param [String] url
+    # @return [[String] filename, [String] version, [String] build]
     #
-    def valid_version?(arg)
-      return true if arg == 'latest'
-      arg.match(/^[0-9]+\.[0-9]+\.[0-9]+(-[0-9]+)?$/) ? true : false
+    def parse_url_data(url)
+      filename = URI.decode(url).split('/')[-1]
+      { filename: filename,
+        version: filename.split('-')[-2].split('_')[-1],
+        build: filename.split('-')[-1].split('.')[0].split('_')[0] }
     end
   end
 end

@@ -25,7 +25,16 @@ describe Omnijack::Metadata do
   let(:args) { nil }
   let(:obj) { described_class.new(name, args) }
 
+  before(:each) do
+    allow_any_instance_of(described_class).to receive(:to_h).and_return(true)
+  end
+
   describe '#initialize' do
+    it 'initializes the object hash data' do
+      expect_any_instance_of(described_class).to receive(:to_h).and_return(true)
+      obj
+    end
+
     {
       platform: 'linspire',
       platform_version: '3.3.3',
@@ -50,7 +59,7 @@ describe Omnijack::Metadata do
     end
   end
 
-  [:url, :md5, :sha256, :yolo, :filename].each do |i|
+  [:url, :md5, :sha256, :yolo, :filename, :build].each do |i|
     describe "##{i}" do
       before(:each) do
         allow_any_instance_of(described_class).to receive(:to_h)
@@ -64,7 +73,9 @@ describe Omnijack::Metadata do
   end
 
   describe '#[]' do
-    let(:attributes) { [:url, :md5, :sha256, :yolo, :filename] }
+    let(:attributes) do
+      [:url, :md5, :sha256, :yolo, :filename, :version, :build]
+    end
 
     before(:each) do
       allow_any_instance_of(described_class).to receive(:to_h)
@@ -74,7 +85,7 @@ describe Omnijack::Metadata do
                     end)
     end
 
-    [:url, :md5, :sha256, :yolo, :filename].each do |a|
+    [:url, :md5, :sha256, :yolo, :filename, :version, :build].each do |a|
       it "returns the correct #{a}" do
         expect(obj[a]).to eq("#{a} things")
       end
@@ -82,7 +93,12 @@ describe Omnijack::Metadata do
   end
 
   describe '#to_h' do
-    context 'fake data' do
+    before(:each) do
+      allow_any_instance_of(described_class).to receive(:to_h)
+        .and_call_original
+    end
+
+    context 'fake normal package data' do
       let(:url) do
         'https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/' \
           'chefdk-0.2.1-1.el6.x86_64.rpm'
@@ -103,8 +119,14 @@ describe Omnijack::Metadata do
 
       it 'returns the correct result hash' do
         expected = { url: url, md5: md5, sha256: sha256, yolo: yolo,
-                     filename: 'chefdk-0.2.1-1.el6.x86_64.rpm' }
+                     filename: 'chefdk-0.2.1-1.el6.x86_64.rpm',
+                     version: '0.2.1', build: '1' }
         expect(obj.to_h).to eq(expected)
+      end
+
+      it 'overwrites the requested version with the actual package version' do
+        expect(obj.version).to eq('0.2.1')
+        expect(obj.instance_variable_get(:@version)).to eq('0.2.1')
       end
 
       [true, false].each do |tf|
@@ -115,6 +137,35 @@ describe Omnijack::Metadata do
             expect(obj.to_h[:yolo]).to eq(tf)
           end
         end
+      end
+    end
+
+    context 'fake nightly build data' do
+      let(:url) do
+        'https://opscode-omnibus-packages.s3.amazonaws.com/mac_os_x/' \
+          '10.8/x86_64/chefdk-0.2.2%2B20140916163521.git.23.997cf31-1.dmg'
+      end
+      let(:md5) { 'e7f3ab946c851b50971d117bfa0f6e2c' }
+      let(:sha256) do
+        'b9ecab8f2ebb258c3bdc341ab82310dfbfc8b8a5b27802481f27daf607ba7f99'
+      end
+      let(:yolo) { true }
+      let(:raw_metadata) do
+        "url\t#{url}\nmd5\t#{md5}\nsha256\t#{sha256}\nyolo\t#{yolo}"
+      end
+
+      before(:each) do
+        allow_any_instance_of(described_class).to receive(:raw_metadata)
+          .and_return(raw_metadata)
+      end
+
+      it 'decodes the encoded URL' do
+        expected = {
+          url: url, md5: md5, sha256: sha256, yolo: yolo,
+          filename: 'chefdk-0.2.2+20140916163521.git.23.997cf31-1.dmg',
+          version: '0.2.2+20140916163521.git.23.997cf31', build: '1'
+        }
+        expect(obj.to_h).to eq(expected)
       end
     end
 
@@ -131,6 +182,7 @@ describe Omnijack::Metadata do
                               platform_version: data[:platform][:version],
                               machine_arch: 'x86_64')
         end
+
         it 'returns the expected data' do
           if !data[:expected]
             expect { obj.to_h }.to raise_error(OpenURI::HTTPError)
@@ -541,36 +593,65 @@ describe Omnijack::Metadata do
     end
   end
 
-  describe '#valid_version?' do
-    context 'a "latest" version' do
-      let(:res) { obj.send(:valid_version?, 'latest') }
+  describe '#parsed_url_data' do
+    let(:url) { nil }
+    let(:res) { obj.send(:parse_url_data, url) }
 
-      it 'returns true' do
-        expect(res).to eq(true)
+    context 'a standard RHEL package URL' do
+      let(:url) do
+        'https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/' \
+          'chefdk-0.2.1-1.el6.x86_64.rpm'
+      end
+
+      it 'extracts the right filename' do
+        expect(res[:filename]).to eq('chefdk-0.2.1-1.el6.x86_64.rpm')
+      end
+
+      it 'extracts the right version' do
+        expect(res[:version]).to eq('0.2.1')
+      end
+
+      it 'extracts the right build' do
+        expect(res[:build]).to eq('1')
       end
     end
 
-    context 'a valid version' do
-      let(:res) { obj.send(:valid_version?, '1.2.3') }
+    context 'a standard Ubuntu package URL' do
+      let(:url) do
+        'https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/' \
+          'x86_64/chefdk_0.2.1-1_amd64.deb'
+      end
 
-      it 'returns true' do
-        expect(res).to eq(true)
+      it 'extracts the right filename' do
+        expect(res[:filename]).to eq('chefdk_0.2.1-1_amd64.deb')
+      end
+
+      it 'extracts the right version' do
+        expect(res[:version]).to eq('0.2.1')
+      end
+
+      it 'extracts the right build' do
+        expect(res[:build]).to eq('1')
       end
     end
 
-    context 'a valid version + build' do
-      let(:res) { obj.send(:valid_version?, '1.2.3-12') }
-
-      it 'returns true' do
-        expect(res).to eq(true)
+    context 'a nightly package URL' do
+      let(:url) do
+        'https://opscode-omnibus-packages.s3.amazonaws.com/mac_os_x/' \
+          '10.8/x86_64/chefdk-0.2.2%2B20140916163521.git.23.997cf31-1.dmg'
       end
-    end
 
-    context 'an invalid version' do
-      let(:res) { obj.send(:valid_version?, 'x.y.z') }
+      it 'extracts the right filename' do
+        expected = 'chefdk-0.2.2+20140916163521.git.23.997cf31-1.dmg'
+        expect(res[:filename]).to eq(expected)
+      end
 
-      it 'returns false' do
-        expect(res).to eq(false)
+      it 'extracts the right version' do
+        expect(res[:version]).to eq('0.2.2+20140916163521.git.23.997cf31')
+      end
+
+      it 'extracts the right build' do
+        expect(res[:build]).to eq('1')
       end
     end
   end

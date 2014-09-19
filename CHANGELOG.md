@@ -3,6 +3,10 @@ Omnijack Gem CHANGELOG
 
 v?.?.? (????-??-??)
 -------------------
+- Calculate and expose version and build numbers as part of metadata
+- Populate project metadata immediately instead of the first time
+`metadata.to_h` is called
+- Remove version string validation to allow for nightly build versions
 
 v0.1.2 (2014-09-17)
 -------------------

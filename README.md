@@ -51,12 +51,16 @@ puts metadata.filename
 puts metadata.md5
 puts metadata.sha256
 puts metadata.yolo
+puts metadata.version
+puts metadata.build
 
 puts metadata[:url]
 puts metadata[:filename]
 puts metadata[:md5]
 puts metadata[:sha256]
 puts metadata[:yolo]
+puts metadata[:version]
+puts metadata[:build]
 ```
 Getting Chef-DK project data from an unofficial Omnitruck API:
 

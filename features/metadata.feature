@@ -11,6 +11,8 @@ Feature: Metadata
     When I create a <Project> project
     Then the metadata has a url attribute
     And the metadata has a filename attribute
+    And the metadata has a version attribute
+    And the metadata has a build attribute
     And the metadata has an md5 attribute
     And the metadata has a sha256 attribute
     And the metadata doesn't have a yolo attribute
@@ -28,6 +30,8 @@ Feature: Metadata
     When I create a <Project> project
     Then the metadata has a url attribute
     And the metadata has a filename attribute
+    And the metadata has a version attribute
+    And the metadata has a build attribute
     And the metadata has an md5 attribute
     And the metadata has a sha256 attribute
     And the metadata has a yolo attribute
