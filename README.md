@@ -3,7 +3,7 @@ Omnijack
 
 [![Gem Version](https://badge.fury.io/rb/omnijack.png)][fury]
 [![Build Status](http://img.shields.io/travis/RoboticCheese/omnijack-ruby.svg)][travis]
-[![Code Climate](http://img.shields.io/codeclimate/github/kabisaict/flow.svg)][codeclimate]
+[![Code Climate](http://img.shields.io/codeclimate/github/RoboticCheese/omnijack-ruby.svg)][codeclimate]
 [![Coverage Status](http://img.shields.io/coveralls/RoboticCheese/omnijack-ruby.svg)][coveralls]
 [![Dependency Status](http://img.shields.io/gemnasium/RoboticCheese/omnijack-ruby.svg)][gemnasium]
 
