@@ -33,6 +33,10 @@ describe Omnijack::Project do
   end
 
   describe '#metadata' do
+    let(:args) do
+      { platform: 'ms_dos', platform_version: '1.2.3', machine_arch: 'i386' }
+    end
+
     before(:each) do
       allow_any_instance_of(Omnijack::Metadata).to receive(:to_h)
         .and_return(true)

@@ -16,7 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'ohai'
 require 'open-uri'
 require_relative 'config'
 require_relative '../omnijack'
@@ -29,8 +28,12 @@ class Omnijack
     include ::Chef::Mixin::ParamsValidate
     include Config
 
-    def initialize(name, args = {})
+    def initialize(name, args)
       super
+      [:platform, :platform_version, :machine_arch].each do |i|
+        send(i, args[i])
+        args.delete(i)
+      end
       args.each { |k, v| send(k, v) unless v.nil? } unless args.nil?
       to_h
     end
@@ -104,7 +107,7 @@ class Omnijack
     # @return [String]
     #
     def platform(arg = nil)
-      set_or_return(:platform, arg, kind_of: String, default: node[:platform])
+      set_or_return(:platform, arg, kind_of: String, required: true)
     end
 
     #
@@ -114,12 +117,12 @@ class Omnijack
     # @return [String]
     #
     def platform_version(arg = nil)
-      # TODO: The platform version parser living in `node` means passing e.g.
-      # '10.9.2' here won't result in it being shortened to '10.9'
-      set_or_return(:platform_version,
-                    arg,
-                    kind_of: String,
-                    default: node[:platform_version])
+      !arg.nil? && arg = case platform
+                         when 'mac_os_x' then platform_version_mac_os_x(arg)
+                         when 'windows' then platform_version_windows(arg)
+                         else arg
+                         end
+      set_or_return(:platform_version, arg, kind_of: String, required: true)
     end
 
     #
@@ -132,7 +135,7 @@ class Omnijack
       set_or_return(:machine_arch,
                     arg,
                     kind_of: String,
-                    default: node[:kernel][:machine])
+                    required: true)
     end
 
     private
@@ -181,45 +184,29 @@ class Omnijack
     end
 
     #
-    # Fetch and return node data from Ohai
-    #
-    # @return [Mash]
-    #
-    def node
-      unless @node
-        @node = Ohai::System.new.all_plugins('platform')[0].data
-        case @node[:platform]
-        when 'mac_os_x'
-          @node[:platform_version] = platform_version_mac_os_x
-        when 'windows'
-          @node[:platform_version] = platform_version_windows
-        end
-      end
-      @node
-    end
-
-    #
     # Apply special logic for the version of an OS X platform
     #
+    # @param [String] arg
     # @return [String]
     #
-    def platform_version_mac_os_x
-      node[:platform_version].match(/^[0-9]+\.[0-9]+/).to_s
+    def platform_version_mac_os_x(arg)
+      arg.match(/^[0-9]+\.[0-9]+/).to_s
     end
 
     #
     # Apply special logic for the version of a Windows platform
     #
+    # @param [String] arg
     # @return [String]
     #
-    def platform_version_windows
+    def platform_version_windows(arg)
       # Make a best guess and assume a server OS
       # See: http://msdn.microsoft.com/en-us/library/windows/
       #      desktop/ms724832(v=vs.85).aspx
       {
         '6.3' => '2012r2', '6.2' => '2012', '6.1' => '2008r2', '6.0' => '2008',
         '5.2' => '2003r2', '5.1' => 'xp', '5.0' => '2000'
-      }[node[:platform_version].match(/^[0-9]+\.[0-9]+/).to_s]
+      }[arg.match(/^[0-9]+\.[0-9]+/).to_s]
     end
 
     #

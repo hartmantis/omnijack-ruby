@@ -36,12 +36,21 @@ Or install it yourself as:
 Usage
 -----
 
-Getting Chef-DK package metadata from the official Chef API:
+Getting Chef-DK project data from the official Chef API:
 
 ```ruby
 require 'omnijack'
 
 chef_dk = Omnijack::Project::ChefDk.new
+```
+
+Getting Chef-DK package metadata (requires additional target platform
+information):
+
+```ruby
+chef_dk = Omnijack::Project::ChefDk.new(platform: 'ubuntu',
+                                        platform_version: '14.04',
+                                        machine_arch: 'x86_64')
 metadata = chef_dk.metadata
 
 puts metadata
@@ -62,6 +71,7 @@ puts metadata[:yolo]
 puts metadata[:version]
 puts metadata[:build]
 ```
+
 Getting Chef-DK project data from an unofficial Omnitruck API:
 
 ```ruby
@@ -77,16 +87,6 @@ Omnijack::Project::ChefDk.new(
   version: '1.2.3',
   prerelease: true,
   nightlies: true
-)
-```
-
-Getting Chef-DK project data for a platform other than the one running:
-
-```ruby
-Omnijack::Project::ChefDk.new(
-  platform: 'ubuntu',
-  platform_version: '14.04',
-  machine_arch: 'x86_64'
 )
 ```
 
@@ -132,6 +132,7 @@ Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/omnijack/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+3. Add tests for any new code and ensure all tests pass (`rake`)
+4. Commit your changes (`git commit -am 'Add some feature'`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create a new Pull Request
