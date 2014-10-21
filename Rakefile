@@ -13,7 +13,7 @@ RuboCop::RakeTask.new
 desc 'Display LOC stats'
 task :loc do
   puts "\n## LOC Stats"
-  sh 'countloc -r lib/kitchen'
+  sh 'countloc -r lib/omnijack'
 end
 
 RSpec::Core::RakeTask.new(:spec)
