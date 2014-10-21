@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'json'
+require 'multi_json'
 require 'open-uri'
 require_relative 'config'
 require_relative '../omnijack'
@@ -56,7 +56,7 @@ class Omnijack
     #
     def to_h
       # TODO: Use a Mash -- some keys are better off addressed as strings
-      JSON.parse(raw_data, symbolize_names: true)
+      MultiJson.load(raw_data, symbolize_names: true)
     end
 
     #

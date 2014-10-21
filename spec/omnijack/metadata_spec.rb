@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'json'
+require 'multi_json'
 require_relative '../spec_helper'
 require_relative '../../lib/omnijack/metadata'
 
@@ -171,7 +171,7 @@ describe Omnijack::Metadata do
 
     json = ::File.open(File.expand_path('../../support/real_test_data.json',
                                         __FILE__)).read
-    JSON.parse(json, symbolize_names: true).each do |data|
+    MultiJson.load(json, symbolize_names: true).each do |data|
       context "#{data[:platform]} Chef-DK" do
         let(:obj) do
           described_class.new(:chef_dk,
