@@ -17,11 +17,43 @@
 # limitations under the License.
 
 require_relative '../spec_helper'
-require_relative '../../lib/omnijack/list'
+require_relative '../../lib/omnijack/endpoint'
 
-describe Omnijack::List do
+describe Omnijack::Endpoint do
   let(:name) { :chef_dk }
-  let(:obj) { described_class.new(name) }
+  let(:args) { {} }
+  let(:obj) { described_class.new(name, args) }
+
+  describe '#initialize' do
+    shared_examples_for 'any context' do
+      it 'sets the project name' do
+        expect(obj.name).to eq(:chef_dk)
+        expect(obj.instance_variable_get(:@name)).to eq(:chef_dk)
+      end
+    end
+
+    context 'no extra args provided' do
+      let(:obj) { described_class.new(name) }
+
+      it_behaves_like 'any context'
+
+      it 'holds an empty hash for the args' do
+        expect(obj.args).to eq({})
+        expect(obj.instance_variable_get(:@args)).to eq({})
+      end
+    end
+
+    context 'a base_url arg provided' do
+      let(:args) { { base_url: 'https://example.com' } }
+
+      it_behaves_like 'any context'
+
+      it 'sets the given arg' do
+        expect(obj.send(:base_url)).to eq(args[:base_url])
+        expect(obj.instance_variable_get(:@base_url)).to eq(args[:base_url])
+      end
+    end
+  end
 
   describe '#method_missing' do
     let(:to_h) { { thing1: 'yup', thing2: 'nope', thing3: 'maybe' } }
@@ -70,7 +102,13 @@ describe Omnijack::List do
     end
 
     context 'real data' do
+      let(:endpoint) { '/full_client_list' }
       let(:obj) { described_class.new(:chef) }
+
+      before(:each) do
+        allow_any_instance_of(described_class).to receive(:endpoint)
+          .and_return(endpoint)
+      end
 
       it 'returns the expected data' do
         expected = '/el/6/i686/chef-10.12.0-1.el6.i686.rpm'
@@ -87,17 +125,53 @@ describe Omnijack::List do
         .and_return(raw_data)
     end
 
-    it 'returns the raw HTTP GET string' do
-      expect(obj.to_s).to eq(raw_data)
+    it 'returns the raw data' do
+      expect(obj.to_s).to eq('SOME STUFF')
+    end
+  end
+
+  describe '#base_url' do
+    context 'no argument provided' do
+      it 'uses the default' do
+        res = obj
+        expected = 'https://www.getchef.com/chef'
+        expect(res.base_url).to eq(expected)
+        expect(res.instance_variable_get(:@base_url)).to eq(expected)
+      end
+    end
+
+    context 'a valid argument provided' do
+      let(:obj) do
+        o = super()
+        o.base_url('http://example.com') && o
+      end
+
+      it 'uses the provided arg' do
+        expect(obj.base_url).to eq('http://example.com')
+        expect(obj.instance_variable_get(:@base_url))
+          .to eq('http://example.com')
+      end
+    end
+
+    context 'an invalid argument provided' do
+      let(:obj) do
+        o = super()
+        o.base_url(:hello) && o
+      end
+
+      it 'raises an exception' do
+        expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
+      end
     end
   end
 
   describe '#raw_data' do
     let(:read) { '{"thing1": "yup", "thing2": "nope"}' }
-    let(:open) { double(read: read) }
+    let(:api_url) { double(open: double(read: read)) }
 
     before(:each) do
-      allow_any_instance_of(URI::HTTP).to receive(:open).and_return(open)
+      allow_any_instance_of(described_class).to receive(:api_url)
+        .and_return(api_url)
     end
 
     it 'returns a GET of the API URL' do
@@ -124,10 +198,15 @@ describe Omnijack::List do
   end
 
   describe '#endpoint' do
-    let(:name) { :chef_container }
+    let(:name) { :cook }
+
+    before(:each) do
+      stub_const('::Omnijack::Endpoint::OMNITRUCK_PROJECTS',
+                 cook: { endpoints: { endpoint: '/there' } })
+    end
 
     it 'returns the appropriate metadata endpoint' do
-      expect(obj.send(:endpoint)).to eq('/full_container_list')
+      expect(obj.send(:endpoint)).to eq('/there')
     end
   end
 end

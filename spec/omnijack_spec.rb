@@ -53,50 +53,6 @@ describe Omnijack do
         expect(obj.instance_variable_get(:@args)).to eq(args)
       end
     end
-
-    context 'a base_url arg provided' do
-      let(:args) { { base_url: 'https://example.com' } }
-
-      it 'sets the given arg' do
-        expect(obj.send(:base_url)).to eq(args[:base_url])
-        expect(obj.instance_variable_get(:@base_url)).to eq(args[:base_url])
-      end
-    end
-  end
-
-  describe '#base_url' do
-    context 'no argument provided' do
-      it 'uses the default' do
-        res = obj
-        expected = 'https://www.getchef.com/chef'
-        expect(res.base_url).to eq(expected)
-        expect(res.instance_variable_get(:@base_url)).to eq(expected)
-      end
-    end
-
-    context 'a valid argument provided' do
-      let(:obj) do
-        o = super()
-        o.base_url('http://example.com') && o
-      end
-
-      it 'uses the provided arg' do
-        expect(obj.base_url).to eq('http://example.com')
-        expect(obj.instance_variable_get(:@base_url))
-          .to eq('http://example.com')
-      end
-    end
-
-    context 'an invalid argument provided' do
-      let(:obj) do
-        o = super()
-        o.base_url(:hello) && o
-      end
-
-      it 'raises an exception' do
-        expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
-      end
-    end
   end
 
   describe '#name' do
@@ -104,6 +60,14 @@ describe Omnijack do
 
     it 'returns the project name, symbolized' do
       expect(obj.name).to eq(:chef_container)
+    end
+  end
+
+  describe '#args' do
+    let(:args) { { platform: 'thing' } }
+
+    it 'returns the provided args' do
+      expect(obj.args).to eq(args)
     end
   end
 end

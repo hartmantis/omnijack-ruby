@@ -17,10 +17,10 @@
 # limitations under the License.
 
 require 'multi_json'
-require_relative '../spec_helper'
-require_relative '../../lib/omnijack/metadata'
+require_relative '../../spec_helper'
+require_relative '../../../lib/omnijack/endpoint/metadata'
 
-describe Omnijack::Metadata do
+describe Omnijack::Endpoint::Metadata do
   let(:name) { :chef_dk }
   let(:args) do
     { platform: 'linspire', platform_version: '3.3.3', machine_arch: 'risc' }
@@ -32,11 +32,6 @@ describe Omnijack::Metadata do
   end
 
   describe '#initialize' do
-    it 'initializes the object hash data' do
-      expect_any_instance_of(described_class).to receive(:to_h).and_return(true)
-      obj
-    end
-
     context 'the required args provided' do
       {
         platform: 'linspire', platform_version: '3.3.3', machine_arch: 'risc'
@@ -86,26 +81,6 @@ describe Omnijack::Metadata do
     end
   end
 
-  describe '#[]' do
-    let(:attributes) do
-      [:url, :md5, :sha256, :yolo, :filename, :version, :build]
-    end
-
-    before(:each) do
-      allow_any_instance_of(described_class).to receive(:to_h)
-        .and_return(attributes.each_with_object({}) do |a, hsh|
-                      hsh[a] = "#{a} things"
-                      hsh
-                    end)
-    end
-
-    [:url, :md5, :sha256, :yolo, :filename, :version, :build].each do |a|
-      it "returns the correct #{a}" do
-        expect(obj[a]).to eq("#{a} things")
-      end
-    end
-  end
-
   describe '#to_h' do
     before(:each) do
       allow_any_instance_of(described_class).to receive(:to_h)
@@ -122,13 +97,13 @@ describe Omnijack::Metadata do
         'afd487ab6f0cd0286a0a3d2808a041c784c064eddb6193d688edfb6741065b56'
       end
       let(:yolo) { true }
-      let(:raw_metadata) do
+      let(:raw_data) do
         "url\t#{url}\nmd5\t#{md5}\nsha256\t#{sha256}\nyolo\t#{yolo}"
       end
 
       before(:each) do
-        allow_any_instance_of(described_class).to receive(:raw_metadata)
-          .and_return(raw_metadata)
+        allow_any_instance_of(described_class).to receive(:raw_data)
+          .and_return(raw_data)
       end
 
       it 'returns the correct result hash' do
@@ -164,13 +139,13 @@ describe Omnijack::Metadata do
         'b9ecab8f2ebb258c3bdc341ab82310dfbfc8b8a5b27802481f27daf607ba7f99'
       end
       let(:yolo) { true }
-      let(:raw_metadata) do
+      let(:raw_data) do
         "url\t#{url}\nmd5\t#{md5}\nsha256\t#{sha256}\nyolo\t#{yolo}"
       end
 
       before(:each) do
-        allow_any_instance_of(described_class).to receive(:raw_metadata)
-          .and_return(raw_metadata)
+        allow_any_instance_of(described_class).to receive(:raw_data)
+          .and_return(raw_data)
       end
 
       it 'decodes the encoded URL' do
@@ -183,7 +158,7 @@ describe Omnijack::Metadata do
       end
     end
 
-    json = ::File.open(File.expand_path('../../support/real_test_data.json',
+    json = ::File.open(File.expand_path('../../../support/real_test_data.json',
                                         __FILE__)).read
     MultiJson.load(json, symbolize_names: true).each do |data|
       context "#{data[:platform]} Chef-DK" do
@@ -205,18 +180,6 @@ describe Omnijack::Metadata do
           end
         end
       end
-    end
-  end
-
-  describe '#to_s' do
-    let(:raw_metadata) { 'SOME METADATA' }
-    before(:each) do
-      allow_any_instance_of(described_class).to receive(:raw_metadata)
-        .and_return(raw_metadata)
-    end
-
-    it 'returns the raw metadata string' do
-      expect(obj.to_s).to eq(raw_metadata)
     end
   end
 
@@ -418,33 +381,17 @@ describe Omnijack::Metadata do
     end
   end
 
-  describe '#raw_metadata' do
-    let(:open) { double(read: 'SOME STUFF') }
-
-    before(:each) do
-      allow_any_instance_of(URI::HTTP).to receive(:open).and_return(open)
-    end
-
-    it 'returns a GET of the API URL' do
-      expect(obj.send(:raw_metadata)).to eq('SOME STUFF')
-      expect(obj.instance_variable_get(:@raw_metadata)).to eq('SOME STUFF')
-    end
-  end
-
   describe '#api_url' do
-    let(:base_url) { 'http://example.com/chef' }
-    let(:endpoint) { '/metadata-example' }
-    let(:query_params) { { v: '1.2.3', p: 'ubuntu' } }
+    let(:query_params) { { v: '1.2.3', p: 'ubuntu', pv: '12.04' } }
 
     before(:each) do
-      [:base_url, :endpoint, :query_params].each do |i|
-        allow_any_instance_of(described_class).to receive(i).and_return(send(i))
-      end
+      allow_any_instance_of(described_class).to receive(:query_params)
+        .and_return(query_params)
     end
 
-    it 'constructs a URL based on base + endpoint + params' do
-      expected = URI.parse('http://example.com/chef/metadata-example?' \
-                           'v=1.2.3&p=ubuntu')
+    it 'returns the appropriate metadata endpoint' do
+      expected = URI.parse('https://www.getchef.com/chef/metadata-chefdk?' \
+                           'v=1.2.3&p=ubuntu&pv=12.04')
       expect(obj.send(:api_url)).to eq(expected)
     end
   end
@@ -473,14 +420,6 @@ describe Omnijack::Metadata do
                    pv: '14.04',
                    m: 'x86_64' }
       expect(obj.send(:query_params)).to eq(expected)
-    end
-  end
-
-  describe '#endpoint' do
-    let(:name) { 'chef_container' }
-
-    it 'returns the appropriate metadata endpoint' do
-      expect(obj.send(:endpoint)).to eq('/metadata-container')
     end
   end
 

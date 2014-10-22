@@ -16,19 +16,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'open-uri'
-require_relative 'omnijack/config'
-require_relative 'omnijack/endpoint'
-require_relative 'omnijack/project'
-require_relative 'omnijack/version'
+require_relative '../endpoint'
 
-# Provide a base class with some commons everyone can inherit
-#
-# @author Jonathan Hartman <j@p4nt5.com>
 class Omnijack
-  def initialize(name, args = {})
-    @name = name.to_sym
-    @args = args
+  class Endpoint < Omnijack
+    # A class for representing an Omnitruck list of platform names
+    #
+    # @author Jonathan Hartman <j@p4nt5.com>
+    class Platforms < Endpoint
+    end
   end
-  attr_reader :name, :args
 end

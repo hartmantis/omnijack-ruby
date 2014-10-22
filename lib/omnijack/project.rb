@@ -18,9 +18,7 @@
 
 require_relative '../omnijack'
 require_relative 'config'
-require_relative 'list'
-require_relative 'metadata'
-require_relative 'platforms'
+require_relative 'endpoint'
 require_relative 'project/metaprojects'
 
 class Omnijack
@@ -37,7 +35,7 @@ class Omnijack
     #
     def metadata
       # TODO: This requires too much knowledge of the Metadata class
-      @metadata ||= Metadata.new(name, args)
+      @metadata ||= Endpoint::Metadata.new(name, args)
     end
 
     #
@@ -46,7 +44,7 @@ class Omnijack
     # @return [Omnijack::List]
     #
     def list
-      @list ||= List.new(name, args)
+      @list ||= Endpoint::List.new(name, args)
     end
 
     #
@@ -55,7 +53,7 @@ class Omnijack
     # @return [Omnijack::Platforms]
     #
     def platforms
-      @platforms ||= Platforms.new(name, args)
+      @platforms ||= Endpoint::Platforms.new(name, args)
     end
   end
 end

@@ -41,7 +41,7 @@ describe Omnijack::Config do
 
           # Some endpoints aren't available on Chef's public Omnitruck API
           if [:angry_chef, :chef_dk, :chef_container].include?(project) && \
-            [:package_list, :platform_names].include?(name)
+            [:list, :platforms].include?(name)
             expected = 301
           else
             expected = 200
