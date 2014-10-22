@@ -16,19 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'open-uri'
-require_relative 'omnijack/config'
-require_relative 'omnijack/endpoint'
-require_relative 'omnijack/project'
-require_relative 'omnijack/version'
+require_relative '../../spec_helper'
+require_relative '../../../lib/omnijack/endpoint/platforms'
 
-# Provide a base class with some commons everyone can inherit
-#
-# @author Jonathan Hartman <j@p4nt5.com>
-class Omnijack
-  def initialize(name, args = {})
-    @name = name.to_sym
-    @args = args
+describe Omnijack::Endpoint::Platforms do
+  let(:name) { :chef_dk }
+  let(:obj) { described_class.new(name) }
+
+  describe '#endpoint' do
+    let(:name) { :chef_container }
+
+    it 'returns the appropriate metadata endpoint' do
+      expect(obj.send(:endpoint)).to eq('/chef_container_platform_names')
+    end
   end
-  attr_reader :name, :args
 end

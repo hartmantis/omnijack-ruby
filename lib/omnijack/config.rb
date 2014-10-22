@@ -26,36 +26,36 @@ class Omnijack
       angry_chef: {
         endpoints: {
           metadata: '/metadata-angrychef',
-          package_list: '/full_angrychef_list',
-          platform_names: '/angrychef_platform_names'
+          list: '/full_angrychef_list',
+          platforms: '/angrychef_platform_names'
         }
       },
       chef: {
         endpoints: {
           metadata: '/metadata',
-          package_list: '/full_client_list',
-          platform_names: '/chef_platform_names'
+          list: '/full_client_list',
+          platforms: '/chef_platform_names'
         }
       },
       chef_dk: {
         endpoints: {
           metadata: '/metadata-chefdk',
-          package_list: '/full_chefdk_list',
-          platform_names: '/chefdk_platform_names'
+          list: '/full_chefdk_list',
+          platforms: '/chefdk_platform_names'
         }
       },
       chef_container: {
         endpoints: {
           metadata: '/metadata-container',
-          package_list: '/full_container_list',
-          platform_names: '/chef_container_platform_names'
+          list: '/full_container_list',
+          platforms: '/chef_container_platform_names'
         }
       },
       chef_server: {
         endpoints: {
           metadata: '/metadata-server',
-          package_list: '/full_server_list',
-          platform_names: '/chef_server_platform_names'
+          list: '/full_server_list',
+          platforms: '/chef_server_platform_names'
         }
       }
     }

@@ -7,6 +7,7 @@ Given(/^a(n)? ([\w ]+) ([0-9\.]+) node$/) do |_, platform, version|
 end
 
 Given(/^no special arguments$/) do
+  @args ||= {}
 end
 
 Given(/^nightlies enabled$/) do

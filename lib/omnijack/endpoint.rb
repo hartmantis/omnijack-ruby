@@ -18,20 +18,30 @@
 
 require 'multi_json'
 require 'open-uri'
-require_relative 'config'
+unless Module.const_defined?(:Chef)
+  require_relative '../../vendor/chef/lib/chef/exceptions'
+  require_relative '../../vendor/chef/lib/chef/mixin/params_validate'
+end
 require_relative '../omnijack'
+require_relative 'endpoint/list'
+require_relative 'endpoint/metadata'
+require_relative 'endpoint/platforms'
 
 class Omnijack
-  # A class for representing an Omnitruck list of platform names
+  # A parent class for Omnijack API endpoints
   #
   # @author Jonathan Hartman <j@p4nt5.com>
-  class Platforms < Omnijack
+  class Endpoint < Omnijack
+    include ::Chef::Mixin::ParamsValidate
     include Config
 
-    # TODO: Lots of duplicate code in platforms and list
+    def initialize(name, args = {})
+      super
+      base_url(args[:base_url])
+    end
 
     #
-    # Make list items accessible via methods
+    # Make class items accessible via methods
     #
     # @param [Symbol] method_id
     #
@@ -40,9 +50,9 @@ class Omnijack
     end
 
     #
-    # Make list items accessible via hash keys
+    # Make class items accessible via hash keys
     #
-    # @param [Symbol] key
+    # @param[Symbol] key
     # @return [String, NilClass]
     #
     def [](key)
@@ -50,7 +60,7 @@ class Omnijack
     end
 
     #
-    # Offer a hash representation of the list
+    # Offer a hash representation of the object
     #
     # @return [Hash]
     #
@@ -64,10 +74,21 @@ class Omnijack
     #
     define_method(:to_s) { raw_data }
 
+    #
+    # The base URL of the Omnitruck API
+    #
+    # @param [String, NilClass] arg
+    # @return [String]
+    #
+    def base_url(arg = nil)
+      # TODO: Better URL validation
+      set_or_return(:base_url, arg, kind_of: String, default: DEFAULT_BASE_URL)
+    end
+
     private
 
     #
-    # Fetch the raw list from the configured URI
+    # Fetch the raw data from the configured URI
     #
     # @return [String]
     #
@@ -90,7 +111,8 @@ class Omnijack
     # @return [String]
     #
     def endpoint
-      OMNITRUCK_PROJECTS[name][:endpoints][:platform_names]
+      cl = self.class.to_s.split(':')[-1].downcase.to_sym
+      OMNITRUCK_PROJECTS[name][:endpoints][cl]
     end
   end
 end
