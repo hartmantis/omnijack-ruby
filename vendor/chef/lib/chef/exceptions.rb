@@ -23,19 +23,19 @@ class Chef
   # namespace.
   class Exceptions
 
-    # Backcompat with Chef::ShellOut code:
-    require 'mixlib/shellout/exceptions'
+    # # Backcompat with Chef::ShellOut code:
+    # require 'mixlib/shellout/exceptions'
 
-    def self.const_missing(const_name)
-      if const_name == :ShellCommandFailed
-        Chef::Log.warn("Chef::Exceptions::ShellCommandFailed is deprecated, use Mixlib::ShellOut::ShellCommandFailed")
-        called_from = caller[0..3].inject("Called from:\n") {|msg, trace_line| msg << "  #{trace_line}\n" }
-        Chef::Log.warn(called_from)
-        Mixlib::ShellOut::ShellCommandFailed
-      else
-        super
-      end
-    end
+    # def self.const_missing(const_name)
+    #   if const_name == :ShellCommandFailed
+    #     Chef::Log.warn("Chef::Exceptions::ShellCommandFailed is deprecated, use Mixlib::ShellOut::ShellCommandFailed")
+    #     called_from = caller[0..3].inject("Called from:\n") {|msg, trace_line| msg << "  #{trace_line}\n" }
+    #     Chef::Log.warn(called_from)
+    #     Mixlib::ShellOut::ShellCommandFailed
+    #   else
+    #     super
+    #   end
+    # end
 
     class Application < RuntimeError; end
     class Cron < RuntimeError; end
@@ -118,6 +118,10 @@ class Chef
     class InvalidDataBagPath < ArgumentError; end
     class DuplicateDataBagItem < RuntimeError; end
 
+    class PowershellCmdletException < RuntimeError; end
+
+    class CannotDetermineHomebrewOwner < Package; end
+
     # A different version of a cookbook was added to a
     # VersionedRecipeList than the one already there.
     class CookbookVersionConflict < ArgumentError ; end
@@ -178,6 +182,8 @@ class Chef
     class InvalidSymlink < RuntimeError; end
 
     class ChildConvergeError < RuntimeError; end
+
+    class NoProviderAvailable < RuntimeError; end
 
     class MissingRole < RuntimeError
       NULL = Object.new

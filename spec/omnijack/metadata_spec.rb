@@ -22,7 +22,9 @@ require_relative '../../lib/omnijack/metadata'
 
 describe Omnijack::Metadata do
   let(:name) { :chef_dk }
-  let(:args) { nil }
+  let(:args) do
+    { platform: 'linspire', platform_version: '3.3.3', machine_arch: 'risc' }
+  end
   let(:obj) { described_class.new(name, args) }
 
   before(:each) do
@@ -35,23 +37,35 @@ describe Omnijack::Metadata do
       obj
     end
 
-    {
-      platform: 'linspire',
-      platform_version: '3.3.3',
-      machine_arch: 'risc'
-    }.each do |k, v|
-      context "a #{k} arg provided" do
-        let(:args) { { k => v } }
-
-        it 'sets the given arg' do
+    context 'the required args provided' do
+      {
+        platform: 'linspire', platform_version: '3.3.3', machine_arch: 'risc'
+      }.each do |k, v|
+        it "sets the given #{k}" do
           expect(obj.send(k)).to eq(v)
           expect(obj.instance_variable_get(:"@#{k}")).to eq(v)
         end
       end
     end
 
+    [:platform, :platform_version, :machine_arch].each do |i|
+      context "missing #{i} arg" do
+        let(:args) do
+          a = super()
+          a.delete(i) && a
+        end
+
+        it 'raises an error' do
+          expect { obj }.to raise_error(Chef::Exceptions::ValidationFailed)
+        end
+      end
+    end
+
     context 'an invalid arg provided' do
-      let(:args) { { potatoes: 'peeled' } }
+      let(:args) do
+        a = super()
+        a.merge!(potatoes: 'peeled') && a
+      end
 
       it 'raises an exception' do
         expect { obj }.to raise_error(NoMethodError)
@@ -306,29 +320,23 @@ describe Omnijack::Metadata do
   end
 
   describe '#platform' do
-    let(:node) { { platform: 'ms_dos' } }
-
-    before(:each) do
-      allow_any_instance_of(described_class).to receive(:node).and_return(node)
-    end
-
     context 'no argument provided' do
-      it 'uses the node Ohai data' do
-        res = obj
-        expect(res.platform).to eq('ms_dos')
-        expect(res.instance_variable_get(:@platform)).to eq('ms_dos')
+      it 'returns the initialized arg' do
+        expected = args[:platform]
+        expect(obj.platform).to eq(expected)
+        expect(obj.instance_variable_get(:@platform)).to eq(expected)
       end
     end
 
     context 'a valid argument provided' do
       let(:obj) do
         o = super()
-        o.platform('ms_bob') && o
+        o.platform('ms_dos') && o
       end
 
       it 'uses the provided arg' do
-        expect(obj.platform).to eq('ms_bob')
-        expect(obj.instance_variable_get(:@platform)).to eq('ms_bob')
+        expect(obj.platform).to eq('ms_dos')
+        expect(obj.instance_variable_get(:@platform)).to eq('ms_dos')
       end
     end
 
@@ -345,16 +353,11 @@ describe Omnijack::Metadata do
   end
 
   describe '#platform_version' do
-    let(:node) { { platform_version: '1.2.3' } }
-
-    before(:each) do
-      allow_any_instance_of(described_class).to receive(:node).and_return(node)
-    end
-
     context 'no argument provided' do
-      it 'uses the node Ohai data' do
-        expect(obj.platform_version).to eq('1.2.3')
-        expect(obj.instance_variable_get(:@platform_version)).to eq('1.2.3')
+      it 'returns the initialized arg' do
+        expected = args[:platform_version]
+        expect(obj.platform_version).to eq(expected)
+        expect(obj.instance_variable_get(:@platform_version)).to eq(expected)
       end
     end
 
@@ -383,17 +386,11 @@ describe Omnijack::Metadata do
   end
 
   describe '#machine_arch' do
-    let(:node) { { kernel: { machine: 'x86_64' } } }
-
-    before(:each) do
-      allow_any_instance_of(described_class).to receive(:node).and_return(node)
-    end
-
     context 'no argument provided' do
-      it 'uses the node Ohai data' do
-        res = obj
-        expect(res.machine_arch).to eq('x86_64')
-        expect(res.instance_variable_get(:@machine_arch)).to eq('x86_64')
+      it 'returns the initialized arg' do
+        expected = args[:machine_arch]
+        expect(obj.machine_arch).to eq(expected)
+        expect(obj.instance_variable_get(:@machine_arch)).to eq(expected)
       end
     end
 
@@ -487,93 +484,15 @@ describe Omnijack::Metadata do
     end
   end
 
-  describe '#node' do
-    let(:platform) { nil }
-    let(:platform_version) { nil }
-    let(:system) do
-      double(all_plugins: [
-        double(data: { platform: platform, platform_version: platform_version })
-      ])
-    end
-
-    before(:each) do
-      unless platform.nil? || platform_version.nil?
-        allow(Ohai::System).to receive(:new).and_return(system)
-      end
-    end
-
-    it 'loads and returns Ohai platform data' do
-      node = obj.send(:node)
-      expect(node[:platform]).to be_an_instance_of(String)
-      expect(node[:platform_version]).to be_an_instance_of(String)
-    end
-
-    context 'Mac OS X' do
-      let(:platform) { 'mac_os_x' }
-      let(:platform_version) { '10.9.2' }
-
-      it 'calls the custom Mac OS X version logic' do
-        o = obj
-        expect(o).to receive(:platform_version_mac_os_x).and_call_original
-        expect(o.send(:node)[:platform_version]).to eq('10.9')
-      end
-    end
-
-    context 'Windows' do
-      let(:platform) { 'windows' }
-      let(:platform_version) { '6.3' }
-
-      it 'calls the custom Windows version logic' do
-        o = obj
-        expect(o).to receive(:platform_version_windows).and_call_original
-        expect(o.send(:node)[:platform_version]).to eq('2012r2')
-      end
-    end
-
-    context 'CentOS' do
-      let(:platform) { 'centos' }
-      let(:platform_version) { '7.0' }
-
-      it 'does not modify the version' do
-        expect(obj.send(:node)[:platform_version]).to eq('7.0')
-      end
-    end
-
-    context 'Ubuntu' do
-      let(:platform) { 'ubuntu' }
-      let(:platform_version) { '14.04' }
-
-      it 'does not modify the version' do
-        expect(obj.send(:node)[:platform_version]).to eq('14.04')
-      end
-    end
-  end
-
   describe '#platform_version_mac_os_x' do
-    let(:node) { { platform_version: platform_version } }
-
-    before(:each) do
-      allow_any_instance_of(described_class).to receive(:node).and_return(node)
-    end
-
     { '10.9' => '10.9', '10.9.4' => '10.9' }.each do |ver, expected|
-      context "Mac OS X version #{ver}" do
-        let(:platform_version) { ver }
-
-        it "returns Mac OSX #{expected}" do
-          expect(obj.send(:platform_version_mac_os_x)).to eq(expected)
-        end
+      it "returns #{expected} for Mac OS X #{ver}" do
+        expect(obj.send(:platform_version_mac_os_x, ver)).to eq(expected)
       end
     end
   end
 
   describe '#platform_version_windows' do
-    let(:node) { { platform_version: platform_version } }
-
-    before(:each) do
-      allow_any_instance_of(described_class).to receive(:node).and_return(node)
-    end
-
     {
       '6.3.123456.789' => '2012r2',
       '6.2.123456.789' => '2012',
@@ -583,12 +502,8 @@ describe Omnijack::Metadata do
       '5.1.123456.789' => 'xp',
       '5.0.123456.789' => '2000'
     }.each do |ver, expected|
-      context "Windows version #{ver}" do
-        let(:platform_version) { ver }
-
-        it "returns Windows #{expected}" do
-          expect(obj.send(:platform_version_windows)).to eq(expected)
-        end
+      it "returns #{expected} for Windows #{ver}" do
+        expect(obj.send(:platform_version_windows, ver)).to eq(expected)
       end
     end
   end

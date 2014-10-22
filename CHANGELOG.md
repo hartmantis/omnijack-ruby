@@ -3,6 +3,8 @@ Omnijack Gem CHANGELOG
 
 v?.?.? (????-??-??)
 -------------------
+- Remove dependency on `ohai`; require platform arguments for metadata
+- Swap out `json` dependency for `multi_json`
 
 v0.2.0 (2014-09-19)
 -------------------

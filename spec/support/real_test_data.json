@@ -120,7 +120,7 @@
     }
   },
   {
-    "platform": {"name": "windows", "version": "2008r2" },
+    "platform": {"name": "windows", "version": "6.1.7600" },
     "version": "0.2.2",
     "prerelease": false,
     "nightlies": false,
@@ -134,7 +134,7 @@
     }
   },
   {
-    "platform": {"name": "windows", "version": "2012" },
+    "platform": {"name": "windows", "version": "6.2.9200" },
     "version": "0.2.2",
     "prerelease": false,
     "nightlies": false,
