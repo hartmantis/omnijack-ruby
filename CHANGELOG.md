@@ -1,6 +1,9 @@
 Omnijack Gem CHANGELOG
 ======================
 
+v?.?.? (????-??-??)
+-------------------
+
 v1.0.0 (2014-10-24)
 -------------------
 - Remove dependency on `ohai`; require platform arguments for metadata
