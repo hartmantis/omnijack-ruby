@@ -42,11 +42,9 @@ class Omnijack
       #
       # Set up an accessor method for each piece of metadata
       #
-      METADATA_ATTRIBUTES.each do |a|
+      METADATA_ATTRIBUTES.concat([:filename, :build]).each do |a|
         define_method(a) { to_h[a] }
       end
-      define_method(:filename) { to_h[:filename] }
-      define_method(:build) { to_h[:build] }
 
       #
       # Offer a hash representation of the metadata
