@@ -89,6 +89,11 @@ Omnijack::Project::ChefDk.new(
   nightlies: true
 )
 ```
+Getting Chef project data:
+
+```ruby
+Omnijack::Project::Chef.new
+```
 
 Getting the Chef project's list of packages:
 
@@ -109,22 +114,17 @@ Getting AngryChef project data:
 ```ruby
 Omnijack::Project::AngryChef.new
 ```
-Getting Chef project data:
-
-```ruby
-Omnijack::Project::Chef.new
-```
 
 Getting Chef-Container project data:
 
 ```ruby
-Omnijack::Project::Container.new
+Omnijack::Project::ChefContainer.new
 ```
 
 Getting Chef Server project data:
 
 ```ruby
-Omnijack::Project::Server.new
+Omnijack::Project::ChefServer.new
 ```
 
 Contributing
