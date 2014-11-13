@@ -25,16 +25,20 @@ describe Omnijack::Endpoint::Metadata do
   let(:args) do
     { platform: 'linspire', platform_version: '3.3.3', machine_arch: 'risc' }
   end
+  let(:to_h) { { version: '1.2.3' } }
   let(:obj) { described_class.new(name, args) }
 
   before(:each) do
-    allow_any_instance_of(described_class).to receive(:to_h).and_return(true)
+    allow_any_instance_of(described_class).to receive(:to_h).and_return(to_h)
   end
 
   describe '#initialize' do
     context 'the required args provided' do
       {
-        platform: 'linspire', platform_version: '3.3.3', machine_arch: 'risc'
+        platform: 'linspire',
+        platform_version: '3.3.3',
+        machine_arch: 'risc',
+        version: '1.2.3'
       }.each do |k, v|
         it "sets the given #{k}" do
           expect(obj.send(k)).to eq(v)
@@ -113,11 +117,6 @@ describe Omnijack::Endpoint::Metadata do
         expect(obj.to_h).to eq(expected)
       end
 
-      it 'overwrites the requested version with the actual package version' do
-        expect(obj.version).to eq('0.2.1')
-        expect(obj.instance_variable_get(:@version)).to eq('0.2.1')
-      end
-
       [true, false].each do |tf|
         context "data with a #{tf} value in it" do
           let(:yolo) { tf }
@@ -185,6 +184,8 @@ describe Omnijack::Endpoint::Metadata do
 
   describe '#version' do
     context 'no argument provided' do
+      let(:to_h) { { version: nil } }
+
       it 'returns latest' do
         res = obj
         expect(res.version).to eq('latest')
@@ -195,12 +196,12 @@ describe Omnijack::Endpoint::Metadata do
     context 'a valid argument provided' do
       let(:obj) do
         o = super()
-        o.version('1.2.3') && o
+        o.version('1.2.4') && o
       end
 
       it 'uses the provided arg' do
-        expect(obj.version).to eq('1.2.3')
-        expect(obj.instance_variable_get(:@version)).to eq('1.2.3')
+        expect(obj.version).to eq('1.2.4')
+        expect(obj.instance_variable_get(:@version)).to eq('1.2.4')
       end
     end
 

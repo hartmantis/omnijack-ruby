@@ -36,6 +36,7 @@ class Omnijack
           args.delete(i)
         end
         args.each { |k, v| send(k, v) unless v.nil? } unless args.nil?
+        version(to_h[:version])
         to_h
       end
 
@@ -53,13 +54,12 @@ class Omnijack
       #
       def to_h
         raw_data.split("\n").each_with_object({}) do |line, hsh|
-          key = line.split[0].to_sym
-          val = line.split[1]
+          key, val = line.split.entries
+          key = key.to_sym
           val = true if val == 'true'
           val = false if val == 'false'
           hsh[key] = val
-          key == :url && hsh.merge!(parse_url_data(val)) && \
-            version(hsh[:version])
+          key == :url && hsh.merge!(parse_url_data(val))
         end
       end
 

@@ -39,7 +39,7 @@ describe Omnijack::Project do
 
     before(:each) do
       allow_any_instance_of(Omnijack::Endpoint::Metadata).to receive(:to_h)
-        .and_return(true)
+        .and_return(version: '1.2.3')
     end
 
     it 'returns a Metadata object' do
