@@ -134,7 +134,7 @@ describe Omnijack::Endpoint do
     context 'no argument provided' do
       it 'uses the default' do
         res = obj
-        expected = 'https://www.getchef.com/chef'
+        expected = 'https://www.chef.io/chef'
         expect(res.base_url).to eq(expected)
         expect(res.instance_variable_get(:@base_url)).to eq(expected)
       end

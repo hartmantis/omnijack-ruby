@@ -21,7 +21,7 @@ class Omnijack
   #
   # @author Jonathan Hartman <j@p4nt5.com>
   module Config
-    DEFAULT_BASE_URL ||= 'https://www.getchef.com/chef'
+    DEFAULT_BASE_URL ||= 'https://www.chef.io/chef'
     OMNITRUCK_PROJECTS ||= {
       angry_chef: {
         endpoints: {
