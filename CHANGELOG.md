@@ -3,6 +3,7 @@ Omnijack Gem CHANGELOG
 
 v?.?.? (????-??-??)
 -------------------
+- Replace every instance of `getchef.com` with `chef.io`
 
 v1.0.0 (2014-10-24)
 -------------------

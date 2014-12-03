@@ -391,7 +391,7 @@ describe Omnijack::Endpoint::Metadata do
     end
 
     it 'returns the appropriate metadata endpoint' do
-      expected = URI.parse('https://www.getchef.com/chef/metadata-chefdk?' \
+      expected = URI.parse('https://www.chef.io/chef/metadata-chefdk?' \
                            'v=1.2.3&p=ubuntu&pv=12.04')
       expect(obj.send(:api_url)).to eq(expected)
     end

@@ -22,7 +22,7 @@ require_relative '../../lib/omnijack/config'
 describe Omnijack::Config do
   describe 'DEFAULT_BASE_URL' do
     it 'uses the official Chef API' do
-      expected = 'https://www.getchef.com/chef'
+      expected = 'https://www.chef.io/chef'
       expect(described_class::DEFAULT_BASE_URL).to eq(expected)
     end
   end
@@ -36,7 +36,7 @@ describe Omnijack::Config do
     described_class::OMNITRUCK_PROJECTS.each do |project, attrs|
       attrs[:endpoints].each do |name, endpoint|
         it "uses a valid #{project}::#{name} endpoint" do
-          url = "http://www.getchef.com/chef#{endpoint}"
+          url = "http://www.chef.io/chef#{endpoint}"
           url << '?v=latest&p=ubuntu&pv=12.04&m=x86_64' if name == :metadata
 
           # Some endpoints aren't available on Chef's public Omnitruck API
