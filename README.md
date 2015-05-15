@@ -1,17 +1,17 @@
-Omnijack
-========
+[![Gem Version](https://img.shields.io/gem/v/omnijack.svg)][gem]
+[![Build Status](https://img.shields.io/travis/RoboticCheese/omnijack-ruby.svg)][travis]
+[![Code Climate](https://img.shields.io/codeclimate/github/RoboticCheese/omnijack-ruby.svg)][codeclimate]
+[![Coverage Status](https://img.shields.io/coveralls/RoboticCheese/omnijack-ruby.svg)][coveralls]
+[![Dependency Status](https://img.shields.io/gemnasium/RoboticCheese/omnijack-ruby.svg)][gemnasium]
 
-[![Gem Version](https://badge.fury.io/rb/omnijack.png)][fury]
-[![Build Status](http://img.shields.io/travis/RoboticCheese/omnijack-ruby.svg)][travis]
-[![Code Climate](http://img.shields.io/codeclimate/github/RoboticCheese/omnijack-ruby.svg)][codeclimate]
-[![Coverage Status](http://img.shields.io/coveralls/RoboticCheese/omnijack-ruby.svg)][coveralls]
-[![Dependency Status](http://img.shields.io/gemnasium/RoboticCheese/omnijack-ruby.svg)][gemnasium]
-
-[fury]: http://badge.fury.io/rb/omnijack
-[travis]: http://travis-ci.org/RoboticCheese/omnijack-ruby
+[gem]: https://rubygems.org/gems/omnijack
+[travis]: https://travis-ci.org/RoboticCheese/omnijack-ruby
 [codeclimate]: https://codeclimate.com/github/RoboticCheese/omnijack-ruby
 [coveralls]: https://coveralls.io/r/RoboticCheese/omnijack-ruby
 [gemnasium]: https://gemnasium.com/RoboticCheese/omnijack-ruby
+
+Omnijack
+========
 
 A Ruby client interface to Chef's
 [Omnitruck](https://github.com/opscode/opscode-omnitruck) API.
