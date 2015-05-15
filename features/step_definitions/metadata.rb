@@ -7,9 +7,9 @@ Then(/^the metadata (has|doesn't have) a(n)? (\w+) attribute$/) do |has, _, a|
             when 'url'
               %r{^https://opscode-omnibus-packages\.s3\.amazonaws\.com.*$}
             when 'filename'
-              /^[A-Za-z0-9_\.\-\+]+\.(rpm|deb|pkg|msi)$/
+              /^[A-Za-z0-9_\.\-\+\~]+\.(rpm|deb|pkg|msi)$/
             when 'version'
-              /^[A-Za-z0-9\.\+]+$/
+              /^[A-Za-z0-9\.\+\~]+$/
             when 'build'
               /^[0-9]+$/
             when 'md5'
