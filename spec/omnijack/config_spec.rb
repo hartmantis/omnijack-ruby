@@ -30,7 +30,6 @@ describe Omnijack::Config do
           else
             expected = 200
           end
-
           expect(Net::HTTP.get_response(URI(url)).code.to_i).to eq(expected)
         end
       end

@@ -5,12 +5,12 @@
     "prerelease": false,
     "nightlies": false,
     "expected": {
-      "url": "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.3.5-1_amd64.deb",
-      "filename": "chefdk_0.3.5-1_amd64.deb",
-      "version": "0.3.5",
+      "url": "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.5.1-1_amd64.deb",
+      "filename": "chefdk_0.5.1-1_amd64.deb",
+      "version": "0.5.1",
       "build": "1",
-      "md5": "cda10f30efd6a80166937668db4a67f7",
-      "sha256": "a81c3dfad698fbb19a6c8e3dd65f04a15fd58a811d99db9c47e5a93e368f341d"
+      "md5": "6e197004e175f81b7661339c696309be",
+      "sha256": "c90bfaa17bddb7c0c762f105a95a63736087b5ec949409c208b6cfe98cfba5ef"
     }
   },
   {
@@ -28,7 +28,7 @@
     }
   },
   {
-    "platform": {"name": "ubuntu", "version": "12.04" },
+    "platform": {"name": "ubuntu", "version": "8.04" },
     "version": null,
     "prerelease": true,
     "nightlies": false,
@@ -40,12 +40,12 @@
     "prerelease": false,
     "nightlies": true,
     "expected": {
-      "url": "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.3.5%2B20141117085014-1_amd64.deb",
-      "filename": "chefdk_0.3.5+20141117085014-1_amd64.deb",
-      "version": "0.3.5+20141117085014",
+      "url": "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.5.1%2B20150501085011-1_amd64.deb",
+      "filename": "chefdk_0.5.1+20150501085011-1_amd64.deb",
+      "version": "0.5.1+20150501085011",
       "build": "1",
-      "md5": "36452d69fe2751a103b0efe45593ee1e",
-      "sha256": "210596c1f5c301fa0a50714b8183e28efcfb2dfee19f7a47bf1e204848022af3"
+      "md5": "0d9c70ea18fe181f671e228718a2102b",
+      "sha256": "e829ceef268d5707e4d47903537db2cccf7d85211766898936e72a411a2eeb09"
     }
   },
   {
@@ -115,8 +115,7 @@
       "version": "0.2.2",
       "build": "1",
       "md5": "5da3f329f7e6d51e778212dea4dae73f",
-      "sha256": "2bc4c5c6f82ee7abed385d837e526fd40777ddc47ad939e4f3ecea625b43a245",
-      "yolo": true
+      "sha256": "2bc4c5c6f82ee7abed385d837e526fd40777ddc47ad939e4f3ecea625b43a245"
     }
   },
   {
@@ -144,8 +143,7 @@
       "version": "0.2.2",
       "build": "1",
       "md5": "21f9af35451a0116b72531f06e93eb05",
-      "sha256": "76038621bad5333b9ceee4dc32325cf2a880fa69ef64a9225d91ab1788c37a53",
-      "yolo": true
+      "sha256": "76038621bad5333b9ceee4dc32325cf2a880fa69ef64a9225d91ab1788c37a53"
     }
   }
 ]
