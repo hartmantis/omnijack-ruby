@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'multi_json'
+require 'json'
 require 'open-uri'
 unless Module.const_defined?(:Chef)
   require_relative '../../vendor/chef/lib/chef/exceptions'
@@ -66,7 +66,7 @@ class Omnijack
     #
     def to_h
       # TODO: Use a Mash -- some keys are better off addressed as strings
-      MultiJson.load(raw_data, symbolize_names: true)
+      JSON.parse(raw_data, symbolize_names: true)
     end
 
     #
