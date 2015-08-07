@@ -1,6 +1,6 @@
 # Encoding: UTF-8
 
-require 'multi_json'
+require 'json'
 require_relative '../../spec_helper'
 require_relative '../../../lib/omnijack/endpoint/metadata'
 
@@ -143,7 +143,7 @@ describe Omnijack::Endpoint::Metadata do
 
     json = ::File.open(File.expand_path('../../../support/real_test_data.json',
                                         __FILE__)).read
-    MultiJson.load(json, symbolize_names: true).each do |data|
+    JSON.parse(json, symbolize_names: true).each do |data|
       context "#{data[:platform]} Chef-DK" do
         let(:obj) do
           described_class.new(:chef_dk,
