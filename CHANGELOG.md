@@ -1,6 +1,9 @@
 Omnijack Gem CHANGELOG
 ======================
 
+v?.?.? (????-??-??)
+-------------------
+
 v1.1.0 (2015-08-07)
 -------------------
 - Switch back to using stdlib JSON instead of multi_json
